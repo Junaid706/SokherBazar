@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ artisan.shop_name }} - SokherBazar{% endblock %}
+
+{% block content %}
+
+<!-- Breadcrumb -->
+<div class="breadcrumb">
+    <div class="container">
+        <div class="breadcrumb-content">
+            <a href="{% url 'home' %}">Home</a>
+            <span class="breadcrumb-divider">/</span>
+            <a href="{% url 'artisans' %}">Artisans</a>
+            <span class="breadcrumb-divider">/</span>
+            <span>{{ artisan.shop_name }}</span>
+        </div>
+    </div>
+</div>
+
+<!-- Artisan Profile Header -->
+<section class="artisan-header">
+    <div class="container">
+        <div class="cover-photo">
+            {% if artisan.cover_photo %}
+                <img src="{{ artisan.cover_photo.url }}" alt="{{ artisan.shop_name }} Cover Photo">
+            {% else %}
+                <img src="{% static 'images/default_cover.jpg' %}" alt="Default Cover">
+            {% endif %}
+        </div>
+        
+        <div class="profile-info">
+            <div class="profile-image">
+                {% if artisan.profile_picture %}
+                    <img src="{{ artisan.profile_picture.url }}" alt="{{ artisan.shop_name }}">
+                {% else %}
+                    <img src="{% static 'images/default_profile.jpg' %}" alt="Default Profile">
+                {% endif %}
+            </div>
+            
+            <div class="profile-details">
+                <h1 class="artisan-name">{{ artisan.shop_name }}</h1>
+                <div class="artisan-location">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>{{ artisan.location }}</span>
+                </div>
+                
+                <div class="artisan-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">{{ products.count }}</div>
+                        <div class="stat-label">Products</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">{{ artisan.rating|default:"0" }}</div>
+                        <div class="stat-label">Rating</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">{{ artisan.joined_date|date:"Y" }}</div>
+                        <div class="stat-label">Joined Year</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Artisan Story Section -->
+<section class="artisan-story-section">
+    <div class="container">
+        <h2 class="section-title">Artisan Story</h2>
+        <div class="story-content">
+            <p>{{ artisan.bio|linebreaks }}</p>
+        </div>
+    </div>
+</section>
+
+<!-- Products Section -->
+<section class="products-section">
+    <div class="container">
+        <h2 class="section-title">Products by {{ artisan.shop_name }}</h2>
+
+        <div class="products-grid">
+            {% for product in products %}
+            <div class="product-card">
+                <div class="product-img">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                    <div class="product-overlay">
+                        <div class="quick-view">Quick View</div>
+                    </div>
+                </div>
+                <div class="product-content">
+                    <h3>{{ product.name }}</h3>
+                    <div class="product-price">৳ {{ product.price }}</div>
+                    <div class="product-rating">
+                        {% for _ in product.star_list.full %}
+                            <i class="fas fa-star"></i>
+                        {% endfor %}
+                        {% for _ in product.star_list.half %}
+                            <i class="fas fa-star-half-alt"></i>
+                        {% endfor %}
+                        {% for _ in product.star_list.empty %}
+                            <i class="far fa-star"></i>
+                        {% endfor %}
+                    </div>
+                    <button class="add-to-cart-sm">Add to Cart</button>
+                </div>
+            </div>
+            {% empty %}
+            <p>No products found for this artisan.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% endblock %}

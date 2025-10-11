@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Register - SokherBazar{% endblock %}
+
+{% block content %}
+<section class="auth-container">
+    <div class="container">
+        <div class="auth-form-container">
+            <div class="auth-header">
+                <h2>Create an Account</h2>
+                <p>Join SokherBazar to support traditional artisans</p>
+            </div>
+            <form class="auth-form" id="register-form" method="POST" enctype="multipart/form-data" action="{% url 'register' %}">
+                {% csrf_token %}
+
+                <div class="user-type-selector">
+                    <div class="user-type-btn active" data-type="buyer">
+                        <i class="fas fa-shopping-cart"></i><span>Buyer</span>
+                    </div>
+                    <div class="user-type-btn" data-type="seller">
+                        <i class="fas fa-store"></i><span>Seller</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="register-name">Full Name</label>
+                    <input type="text" class="form-control" id="register-name" name="full_name" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="register-email">Email Address</label>
+                    <input type="email" class="form-control" id="register-email" name="email" placeholder="Enter your email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="register-password">Password</label>
+                    <input type="password" class="form-control" id="register-password" name="password" placeholder="Create a password" required>
+                    <div class="form-text">Must be at least 8 characters</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="register-confirm-password">Confirm Password</label>
+                    <input type="password" class="form-control" id="register-confirm-password" name="confirm_password" placeholder="Confirm your password" required>
+                </div>
+
+                <!-- Seller Fields -->
+                <div id="seller-fields" class="hidden">
+                    <div class="form-note">
+                        <i class="fas fa-info-circle"></i> Seller accounts require verification. Please upload your NID.
+                    </div>
+                    <div class="form-group">
+                        <label for="shop-name">Shop Name</label>
+                        <input type="text" class="form-control" id="shop-name" name="shop_name" placeholder="Enter your shop name">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone-number">Phone Number</label>
+                        <input type="tel" class="form-control" id="phone-number" name="phone_number" placeholder="Enter your phone number">
+                    </div>
+                    <div class="form-group">
+                        <label>NID Document Upload</label>
+                        <div class="file-upload" id="nid-upload">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Click to upload NID photo</p>
+                            <p class="file-name" id="nid-file-name">No file chosen</p>
+                            <input type="file" id="nid-document" name="nid_document" accept="image/*">
+                        </div>
+                        <div class="form-text">Upload a clear photo of your National ID card</div>
+                    </div>
+                </div>
+
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="terms-agree" required>
+                    <label for="terms-agree">I agree to the <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a></label>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width:100%;">Create Account</button>
+
+                <div class="form-footer">
+                    <p>Already have an account? <a href="{% url 'login' %}">Login now</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const userTypeBtns=document.querySelectorAll('.user-type-btn');
+const sellerFields=document.getElementById('seller-fields');
+const nidDocument=document.getElementById('nid-document');
+const nidFileName=document.getElementById('nid-file-name');
+
+userTypeBtns.forEach(btn=>{
+    btn.addEventListener('click',()=>{
+        userTypeBtns.forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        if(btn.dataset.type==='seller'){sellerFields.classList.remove('hidden');}
+        else{sellerFields.classList.add('hidden');}
+    });
+});
+
+nidDocument.addEventListener('change',(e)=>{
+    const file=e.target.files[0];
+    nidFileName.textContent=file?file.name:'No file chosen';
+});
+</script>
+{% endblock %}
