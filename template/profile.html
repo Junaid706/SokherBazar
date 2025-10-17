@@ -1,0 +1,374 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Profile - SokherBazar{% endblock %}
+
+{% block content %}
+<style>
+:root {
+    --primary: #D35400;
+    --secondary: #27AE60;
+    --accent: #E67E22;
+    --light: #FEF5E7;
+    --dark: #2C3E50;
+    --text: #333333;
+    --text-light: #777777;
+    --white: #FFFFFF;
+}
+
+.profile-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    background-color: var(--light);
+    min-height: 100vh;
+}
+
+.profile-header {
+    background: linear-gradient(to right, var(--primary), var(--accent));
+    color: white;
+    padding: 40px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 4px solid white;
+    margin: 0 auto 20px;
+    overflow: hidden;
+    background-color: var(--light);
+}
+
+.profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-header h1 {
+    margin: 0 0 10px 0;
+    font-size: 2.2rem;
+}
+
+.profile-header .user-role {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}
+
+.profile-content {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 30px;
+}
+
+/* Sidebar Navigation */
+.profile-sidebar {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    height: fit-content;
+}
+
+.sidebar-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-nav li {
+    margin-bottom: 5px;
+}
+
+.sidebar-nav a {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    text-decoration: none;
+    color: var(--text);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.sidebar-nav a:hover {
+    background-color: var(--light);
+    color: var(--primary);
+}
+
+.sidebar-nav a.active {
+    background-color: var(--primary);
+    color: white;
+}
+
+.sidebar-nav i {
+    margin-right: 10px;
+    width: 20px;
+    text-align: center;
+}
+
+/* Main Content */
+.profile-main {
+    background: white;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.section-title {
+    font-size: 1.5rem;
+    color: var(--dark);
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--light);
+}
+
+/* Profile Info */
+.profile-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.info-group label {
+    display: block;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 5px;
+}
+
+.info-group .info-value {
+    padding: 12px 15px;
+    background-color: var(--light);
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+/* Stats Cards */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white;
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.stat-card .stat-number {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.stat-card .stat-label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 12px 25px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+    font-size: 1rem;
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    color: var(--white);
+}
+
+.btn-primary:hover {
+    background-color: transparent;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+}
+
+.btn-secondary:hover {
+    background-color: var(--primary);
+    color: var(--white);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .profile-content {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-header {
+        padding: 30px 20px;
+    }
+
+    .profile-header h1 {
+        font-size: 1.8rem;
+    }
+}
+</style>
+
+<div class="profile-container">
+    <!-- Profile Header -->
+    <div class="profile-header">
+        <div class="profile-avatar">
+            {% if customer and customer.profile_picture %}
+                <img src="{{ customer.profile_picture.url }}" alt="{{ user.get_full_name }}">
+            {% elif artisan and artisan.profile_picture %}
+                <img src="{{ artisan.profile_picture.url }}" alt="{{ user.get_full_name }}">
+            {% else %}
+                <img src="{% static 'images/default-avatar.png' %}" alt="Default Avatar">
+            {% endif %}
+        </div>
+        <h1>{{ user.get_full_name }}</h1>
+        <div class="user-role">
+            {% if artisan %}
+                <i class="fas fa-store"></i> Seller
+            {% else %}
+                <i class="fas fa-user"></i> Buyer
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="profile-content">
+        <!-- Sidebar Navigation -->
+        <div class="profile-sidebar">
+            <ul class="sidebar-nav">
+                <li><a href="{% url 'profile' %}" class="active"><i class="fas fa-user"></i> Profile</a></li>
+
+                {% if artisan %}
+                <li><a href="#"><i class="fas fa-box"></i> My Products</a></li>
+                {% endif %}
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="profile-main">
+            <!-- Personal Information -->
+            <div class="section-title">Personal Information</div>
+            <div class="profile-info-grid">
+                <div class="info-group">
+                    <label>Full Name</label>
+                    <div class="info-value">{{ user.get_full_name }}</div>
+                </div>
+                <div class="info-group">
+                    <label>Email Address</label>
+                    <div class="info-value">{{ user.email }}</div>
+                </div>
+                <div class="info-group">
+                    <label>Phone Number</label>
+                    <div class="info-value">
+                        {% if customer and customer.phone %}
+                            {{ customer.phone }}
+                        {% elif artisan and artisan.phone %}
+                            {{ artisan.phone }}
+                        {% else %}
+                            Not provided
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="info-group">
+                    <label>Member Since</label>
+                    <div class="info-value">
+                        {% if customer %}
+                            {{ customer.joined_date|date:"F d, Y" }}
+                        {% elif artisan %}
+                            {{ artisan.joined_date|date:"F d, Y" }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seller Information (if artisan) -->
+            {% if artisan %}
+            <div class="section-title">Seller Information</div>
+            <div class="profile-info-grid">
+                <div class="info-group">
+                    <label>Shop Name</label>
+                    <div class="info-value">{{ artisan.shop_name }}</div>
+                </div>
+                <div class="info-group">
+                    <label>Craft/Specialty</label>
+                    <div class="info-value">{{ artisan.craft|default:"Not specified" }}</div>
+                </div>
+                <div class="info-group">
+                    <label>Location</label>
+                    <div class="info-value">{{ artisan.location|default:"Not specified" }}</div>
+                </div>
+                <div class="info-group">
+                    <label>Verification Status</label>
+                    <div class="info-value">
+                        {% if artisan.is_verified %}
+                            <span style="color: var(--secondary);"><i class="fas fa-check-circle"></i> Verified</span>
+                        {% else %}
+                            <span style="color: var(--primary);"><i class="fas fa-clock"></i> Pending Verification</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="info-group" style="grid-column: 1 / -1;">
+                    <label>Bio</label>
+                    <div class="info-value" style="min-height: 80px;">{{ artisan.bio|default:"No bio provided" }}</div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Quick Stats -->
+            <div class="section-title">Quick Stats</div>
+            <div class="stats-grid">
+
+                <div class="stat-card">
+                    <div class="stat-number">
+                        {% if customer %}{{ customer.wishlists.count }}{% else %}0{% endif %}
+                    </div>
+                    <div class="stat-label">Wishlist Items</div>
+                </div>
+                {% if artisan %}
+                <div class="stat-card">
+                    <div class="stat-number">{{ artisan.products.count }}</div>
+                    <div class="stat-label">Products Listed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{{ artisan.stories.count }}</div>
+                    <div class="stat-label">Stories Published</div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="section-title">Quick Actions</div>
+            <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                <a href="#" class="btn btn-primary"><i class="fas fa-edit"></i> Edit Profile</a>
+                <a href="{% url 'product_list' %}" class="btn btn-secondary"><i class="fas fa-shopping-cart"></i> Continue Shopping</a>
+                {% if not artisan %}
+                <a href="#" class="btn btn-secondary"><i class="fas fa-store"></i> Become a Seller</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

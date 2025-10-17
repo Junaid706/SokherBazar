@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+    --primary:#D35400;
+    --secondary:#27AE60;
+    --accent:#E67E22;
+    --light:#FEF5E7;
+    --dark:#2C3E50;
+    --text:#333333;
+    --text-light:#777777;
+    --white:#FFFFFF;
+    --gray:#f5f5f5;
+}
+
+/* General */
+body { color: var(--text); background-color: var(--white); line-height:1.6; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+.container { width:100%; max-width:1200px; margin:0 auto; padding:0 20px; }
+
+/* Product Detail Layout */
+.product-detail { display:flex; flex-wrap:wrap; gap:40px; padding:60px 0; }
+.product-image { flex:1; min-width:350px; background-color:var(--light); border-radius:15px; overflow:hidden; box-shadow:0 5px 15px rgba(0,0,0,0.1); position:relative; }
+.product-image img { width:100%; height:100%; object-fit:cover; transition:transform 0.5s; }
+.product-image:hover img { transform:scale(1.05); }
+
+/* Wishlist Heart */
+.wishlist-btn { position:absolute; top:15px; right:15px; background:rgba(255,255,255,0.9); border-radius:50%; width:45px; height:45px; display:flex; align-items:center; justify-content:center; font-size:1.3rem; color:var(--primary); cursor:pointer; transition:all 0.3s; }
+.wishlist-btn.active, .wishlist-btn:hover { background:var(--primary); color:white; }
+
+/* Product Content */
+.product-info { flex:1; min-width:300px; }
+.product-category { color:var(--secondary); font-size:0.95rem; margin-bottom:10px; }
+.product-title { font-size:2rem; color:var(--dark); margin-bottom:15px; }
+.product-artisan { font-size:1rem; color:var(--text-light); margin-bottom:15px; }
+.product-description { color:var(--text); font-size:1.05rem; margin-bottom:20px; }
+.product-price { display:flex; align-items:center; gap:10px; margin-bottom:20px; }
+.price { font-size:1.6rem; font-weight:700; color:var(--primary); }
+.original-price { text-decoration:line-through; color:var(--text-light); font-size:1rem; }
+
+/* Buttons */
+.btn { display:inline-block; padding:12px 30px; border-radius:50px; text-decoration:none; font-weight:600; transition: all 0.3s ease; cursor:pointer; font-size:1rem; border:none; }
+.btn-primary { background-color: var(--primary); color: var(--white); border:2px solid var(--primary); }
+.btn-primary:hover { background-color:transparent; color: var(--primary); }
+.btn-secondary { background-color:transparent; color: var(--primary); border:2px solid var(--primary); }
+.btn-secondary:hover { background-color: var(--primary); color: var(--white); }
+
+/* Rating Stars */
+.rating { display:flex; align-items:center; margin-bottom:15px; }
+.rating i { color:#FFC107; margin-right:3px; }
+
+/* Related Products Section */
+.related-section { background:var(--light); padding:60px 0; }
+.related-title { text-align:center; font-size:1.8rem; color:var(--dark); margin-bottom:30px; }
+.related-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:25px; }
+.related-card { background:white; border-radius:10px; overflow:hidden; box-shadow:0 5px 15px rgba(0,0,0,0.1); text-decoration:none; color:inherit; transition:transform 0.3s; }
+.related-card:hover { transform:translateY(-5px); }
+.related-card img { width:100%; height:200px; object-fit:cover; }
+.related-card-content { padding:15px; }
+.related-card-content h3 { font-size:1.1rem; color:var(--dark); margin-bottom:8px; }
+.related-card-content p { font-size:0.9rem; color:var(--text-light); }
+
+@media (max-width:768px) {
+    .product-detail { flex-direction:column; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="product-detail">
+        <div class="product-image">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            {% else %}
+                <img src="{% static 'images/default-product.jpg' %}" alt="{{ product.name }}">
+            {% endif %}
+            <div class="wishlist-btn"><i class="far fa-heart"></i></div>
+        </div>
+
+        <div class="product-info">
+            <div class="product-category">{{ product.category.name }}</div>
+            <h1 class="product-title">{{ product.name }}</h1>
+            <div class="product-artisan">By: {{ product.artisan.shop_name }}</div>
+
+            <div class="rating">
+                {% for _ in product.star_list.full %}<i class="fas fa-star"></i>{% endfor %}
+                {% for _ in product.star_list.half %}<i class="fas fa-star-half-alt"></i>{% endfor %}
+                {% for _ in product.star_list.empty %}<i class="far fa-star"></i>{% endfor %}
+                <span style="margin-left:8px; color:var(--text-light)">({{ product.rating|default:"0" }})</span>
+            </div>
+
+            <div class="product-price">
+                <span class="price">৳ {{ product.discount_price|default:product.price }}</span>
+                {% if product.discount_price %}
+                <span class="original-price">৳ {{ product.price }}</span>
+                {% endif %}
+            </div>
+
+            <p class="product-description">{{ product.description }}</p>
+
+            <form action="{% url 'add_to_cart' product.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary"><i class="fas fa-shopping-cart"></i> Add to Cart</button>
+                <a href="{% url 'product_list' %}" class="btn btn-secondary" style="margin-left:10px;">Back to Shop</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% if related_products %}
+<section class="related-section">
+    <div class="container">
+        <h2 class="related-title">You May Also Like</h2>
+        <div class="related-grid">
+            {% for item in related_products %}
+            <a href="{% url 'product_detail' item.id %}" class="related-card">
+                <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                <div class="related-card-content">
+                    <h3>{{ item.name }}</h3>
+                    <p>৳ {{ item.price }}</p>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<script>
+document.querySelector('.wishlist-btn').addEventListener('click', function() {
+    const icon = this.querySelector('i');
+    icon.classList.toggle('fas');
+    icon.classList.toggle('far');
+    this.classList.toggle('active');
+});
+</script>
+{% endblock %}

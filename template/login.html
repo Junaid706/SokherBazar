@@ -4,43 +4,45 @@
 {% block title %}Login - SokherBazar{% endblock %}
 
 {% block content %}
-<section class="auth-container">
+<section class="auth-container" style="padding: 80px 0; background-color: #FEF5E7;">
     <div class="container">
-        <div class="auth-form-container">
-            <div class="auth-header">
-                <h2>Welcome Back</h2>
-                <p>Login to continue exploring SokherBazar</p>
+        <div class="auth-form-container" style="max-width: 500px; margin: 0 auto; background-color: white; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); overflow: hidden;">
+            <div class="auth-header" style="background: linear-gradient(to right, #D35400, #E67E22); color: white; padding: 30px 20px; text-align: center;">
+                <h2 style="margin: 0 0 10px 0; font-size: 2rem;">Welcome Back</h2>
+                <p style="margin: 0; opacity: 0.9;">Login to continue exploring SokherBazar</p>
             </div>
-            <form class="auth-form" id="login-form" method="POST" action="{% url 'login' %}">
+            <form class="auth-form" id="login-form" method="POST" action="{% url 'login' %}" style="padding: 30px;">
                 {% csrf_token %}
 
-                <div class="form-group">
-                    <label for="login-email">Email Address</label>
-                    <input type="email" class="form-control" id="login-email" name="email" placeholder="Enter your email" required>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label for="login-email" style="display: block; margin-bottom: 8px; font-weight: 600; color: #2C3E50;">Email Address</label>
+                    <input type="email" class="form-control" id="login-email" name="email" placeholder="Enter your email" required
+                           style="width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem; transition: border 0.3s;">
                 </div>
 
-                <div class="form-group">
-                    <label for="login-password">Password</label>
-                    <input type="password" class="form-control" id="login-password" name="password" placeholder="Enter your password" required>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label for="login-password" style="display: block; margin-bottom: 8px; font-weight: 600; color: #2C3E50;">Password</label>
+                    <input type="password" class="form-control" id="login-password" name="password" placeholder="Enter your password" required
+                           style="width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem; transition: border 0.3s;">
                 </div>
 
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="remember-me" name="remember_me">
-                    <label for="remember-me">Remember me</label>
+                <div class="form-check" style="margin-bottom: 20px; display: flex; align-items: center;">
+                    <input type="checkbox" class="form-check-input" id="remember-me" name="remember_me"
+                           style="margin-right: 10px;">
+                    <label for="remember-me" style="color: #2C3E50;">Remember me</label>
                 </div>
 
-                <button type="submit" class="btn btn-primary" style="width:100%;">Login</button>
+                <button type="submit" class="btn btn-primary" style="width:100%; padding: 12px; background-color: #D35400; color: white; border: none; border-radius: 50px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s;">Login</button>
 
-                <div class="form-footer">
-                    <p>Don't have an account? <a href="{% url 'register' %}">Register now</a></p>
-                    <p><a href="#">Forgot your password?</a></p>
+                <div class="form-footer" style="text-align: center; margin-top: 20px;">
+                    <p style="margin: 10px 0; color: #777777;">Don't have an account? <a href="{% url 'register' %}" style="color: #27AE60; font-weight: 600; text-decoration: none;">Register now</a></p>
+                    <p style="margin: 10px 0;"><a href="#" style="color: #D35400; text-decoration: none;">Forgot your password?</a></p>
                 </div>
             </form>
         </div>
     </div>
 </section>
 {% endblock %}
-
 
 {% block scripts %}
 <script>

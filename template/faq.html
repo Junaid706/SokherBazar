@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<section class="breadcrumb">
+    <div class="container breadcrumb-content">
+        <a href="{% url 'home' %}">Home</a>
+        <span class="breadcrumb-divider">/</span>
+        <span>FAQ</span>
+    </div>
+</section>
+
+<section class="dashboard container">
+    <div class="welcome-banner">
+        <div class="welcome-text">
+            <h2>Frequently Asked Questions</h2>
+            <p>Find answers to common questions about SokherBazar.</p>
+        </div>
+    </div>
+
+    <div class="dashboard-sections">
+
+        <!-- General Questions -->
+        <div class="dashboard-card">
+            <div class="card-header">
+                <h3 class="card-title">General Questions</h3>
+            </div>
+            <div class="space-y-6">
+                <div class="faq-item">
+                    <h4 class="font-semibold">What is SokherBazar?</h4>
+                    <p>SokherBazar is an online marketplace where you can buy authentic handmade products from rural artisans across Bangladesh.</p>
+                </div>
+                <div class="faq-item">
+                    <h4 class="font-semibold">How does SokherBazar support artisans?</h4>
+                    <p>The platform allows artisans to open shops, showcase their products, share their stories, and sell directly to buyers while building trust and visibility.</p>
+                </div>
+                <div class="faq-item">
+                    <h4 class="font-semibold">Is SokherBazar safe for online shopping?</h4>
+                    <p>Yes. All transactions are secure, sellers are verified, and the platform has a review system to ensure product quality.</p>
+                </div>
+                <div class="faq-item">
+                    <h4 class="font-semibold">Can I contact an artisan directly?</h4>
+                    <p>Yes. Buyers can contact artisans via the messaging system on the dashboard for questions about products or customization.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Buyer Questions -->
+        <div class="dashboard-card">
+            <div class="card-header">
+                <h3 class="card-title">Buyer Questions</h3>
+            </div>
+            <div class="space-y-6">
+                <div class="faq-item">
+                    <h4 class="font-semibold">How do I create an account?</h4>
+                    <p>You can register using the "Register" link in the header, select your account type (Buyer), and fill in your details.</p>
+                </div>
+                <div class="faq-item">
+                    <h4 class="font-semibold">How can I track my orders?</h4>
+                    <p>Once your order is placed, you can track it in your dashboard under "Order History" or receive updates via email/SMS notifications.</p>
+                </div>
+                <div class="faq-item">
+                    <h4 class="font-semibold">Can I return or exchange a product?</h4>
+                    <p>Return and exchange policies depend on the seller. Please check the product page or contact the artisan through your dashboard.</p>
+                </div>
+                <div class="faq-item">
+                    <h4 class="font-semibold">What payment methods are available?</h4>
+                    <p>SokherBazar supports multiple secure payment options, including online banking, mobile payment apps, and cash on delivery (where available).</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seller / Artisan Questions -->
+        <div class="dashboard-card">
+            <div class="card-header">
+                <h3 class="card-title">Seller Questions</h3>
+            </div>
+            <div class="space-y-6">
+                <div class="faq-item">
+                    <h4 class="font-semibold">How do I open a shop?</h4>
+                    <p>Artisans can register with SokherBazar, submit verification documents, and after approval, create and manage their shop and product listings.</p>
+                </div>
+                <div class="faq-item">
+                    <h4 class="font-semibold">Can I share my story on SokherBazar?</h4>
+                    <p>Yes. You can request to be featured in "Seller Story" videos, which showcase your craft and journey to buyers.</p>
+                </div>
+                <div class="faq-item">
+                    <h4 class="font-semibold">How can I manage orders?</h4>
+                    <p>Sellers can view orders in their dashboard, update delivery status, and communicate with buyers if needed.</p>
+                </div>
+                <div class="faq-item">
+                    <h4 class="font-semibold">Do I get analytics for my shop?</h4>
+                    <p>Yes. Sellers have access to basic analytics like product views, order count, and earnings to improve their shop performance.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Shipping & Delivery Questions -->
+        <div class="dashboard-card">
+            <div class="card-header">
+                <h3 class="card-title">Shipping & Delivery</h3>
+            </div>
+            <div class="space-y-6">
+                <div class="faq-item">
+                    <h4 class="font-semibold">Does SokherBazar handle delivery?</h4>
+                    <p>The platform partners with courier services for secure delivery. Sellers prepare the order, and the courier delivers it to the buyer.</p>
+                </div>
+                <div class="faq-item">
+                    <h4 class="font-semibold">Can I change the shipping address after ordering?</h4>
+                    <p>Shipping details can be updated only before the order is processed. Contact support immediately if changes are needed.</p>
+                </div>
+                <div class="faq-item">
+                    <h4 class="font-semibold">How long does delivery take?</h4>
+                    <p>Delivery times vary by location and courier service, but most orders within Bangladesh are delivered within 3–7 business days.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Support Questions -->
+        <div class="dashboard-card">
+            <div class="card-header">
+                <h3 class="card-title">Support</h3>
+            </div>
+            <div class="space-y-6">
+                <div class="faq-item">
+                    <h4 class="font-semibold">How can I contact SokherBazar support?</h4>
+                    <p>You can reach us via the Contact page or email at <strong>support@sokherbazar.com</strong>.</p>
+                </div>
+                <div class="faq-item">
+                    <h4 class="font-semibold">Can I report a problem with a product or seller?</h4>
+                    <p>Yes. Use the "Report" option on the product page or contact support to resolve issues.</p>
+                </div>
+                <div class="faq-item">
+                    <h4 class="font-semibold">Does SokherBazar have notifications for offers and updates?</h4>
+                    <p>Yes. Buyers and sellers receive notifications for promotions, order updates, and featured artisan stories.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<style>
+:root {
+    --primary:#D35400;
+    --accent:#E67E22;
+    --light:#FEF5E7;
+    --dark:#2C3E50;
+    --text:#333;
+    --text-light:#777;
+    --white:#fff;
+    --border:#e0e0e0;
+}
+body {color:var(--text);background-color:var(--white);line-height:1.6;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;}
+.container {width:100%;max-width:1200px;margin:0 auto;padding:0 20px;}
+.section-title {font-size:2.2rem;margin-bottom:2.5rem;color:var(--dark);position:relative;text-align:center;}
+.section-title:after {content:'';display:block;width:80px;height:4px;background:var(--primary);margin:10px auto;border-radius:2px;}
+.breadcrumb {padding:20px 0;background-color:#f5f5f5;}
+.breadcrumb-content {display:flex;align-items:center;font-size:.9rem;}
+.breadcrumb-content a {color:var(--text-light);text-decoration:none;}
+.breadcrumb-content a:hover {color:var(--primary);}
+.breadcrumb-divider {margin:0 10px;color:var(--text-light);}
+.dashboard {padding:40px 0;}
+.welcome-banner {background:linear-gradient(to right,var(--primary),var(--accent));color:white;padding:30px;border-radius:10px;margin-bottom:30px;display:flex;justify-content:space-between;align-items:center;}
+.welcome-text h2 {font-size:1.8rem;margin-bottom:10px;}
+.welcome-text p {opacity:.9;}
+.dashboard-sections {display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:25px;margin-bottom:40px;}
+.dashboard-card {background:white;border-radius:10px;box-shadow:0 5px 15px rgba(0,0,0,.05);padding:25px;transition:transform .3s;}
+.dashboard-card:hover {transform:translateY(-5px);}
+.card-header {display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:15px;border-bottom:1px solid var(--border);}
+.card-title {font-size:1.3rem;color:var(--dark);}
+.faq-item h4 {font-size:1.1rem;color:var(--primary);margin-bottom:8px;}
+.faq-item p {font-size:0.95rem;color:var(--text-light);}
+.space-y-6 > * + * {margin-top:1.5rem;}
+@media(max-width:768px){.welcome-banner{flex-direction:column;text-align:center}}
+</style>
+{% endblock %}

@@ -18,6 +18,11 @@
             --white: #FFFFFF;
         }
 
+        .nav-menu li.active a {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { color: var(--text); background-color: var(--white); line-height:1.6; }
 
@@ -45,6 +50,31 @@
         .nav-menu a { text-decoration:none; color: var(--text); font-weight:500; transition:color 0.3s; }
         .nav-menu a:hover { color: var(--primary); }
         .header-actions { display:flex; align-items:center; }
+
+        /* Profile Dropdown */
+        .user-profile { position: relative; display: flex; align-items: center; cursor: pointer; }
+        .profile-name { margin-left: 8px; font-weight: 500; color: var(--dark); }
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            top: 45px;
+            right: 0;
+            background: var(--white);
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 2000;
+            min-width: 150px;
+        }
+        .profile-dropdown ul { list-style:none; padding:10px 0; margin:0; }
+        .profile-dropdown ul li { padding:8px 20px; }
+        .profile-dropdown ul li a { color: var(--text); text-decoration:none; display:block; width:100%; transition: color 0.3s; }
+        .profile-dropdown ul li a:hover { color: var(--primary); }
+
+        .profile-menu.active .profile-dropdown {
+            display: block;
+        }
+
         .search-icon, .cart-icon, .user-icon { font-size:1.2rem; margin-left:20px; color: var(--dark); cursor:pointer; position:relative; }
         .cart-icon::after { content:'3'; position:absolute; top:-8px; right:-8px; background-color: var(--primary); color:white; font-size:0.7rem; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
 
@@ -79,28 +109,86 @@
                 <div class="logo-text">SokherBazar</div>
             </a>
             <ul class="nav-menu">
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'products' %}">Products</a></li>
-                <li><a href="{% url 'artisans' %}">Artisans</a></li>
-                <li><a href="{% url 'stories' %}">Stories</a></li>
-                <li><a href="{% url 'contact' %}">Contact</a></li>
-                <li><a href="{% url 'about' %}">About</a></li>
+                <li class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+                    <a href="{% url 'home' %}">Home</a>
+                </li>
+                <li class="{% if request.resolver_match.url_name in 'product_list product_list_by_category product_detail' %}active{% endif %}">
+                    <a href="{% url 'product_list' %}">Products</a>
+                </li>
+                <li class="{% if request.resolver_match.url_name == 'artisans' %}active{% endif %}">
+                    <a href="{% url 'artisans' %}">Artisans</a>
+                </li>
+                <li class="{% if request.resolver_match.url_name == 'stories' %}active{% endif %}">
+                    <a href="{% url 'stories' %}">Stories</a>
+                </li>
+                <li class="{% if request.resolver_match.url_name == 'contact' %}active{% endif %}">
+                    <a href="{% url 'contact' %}">Contact</a>
+                </li>
+                <li class="{% if request.resolver_match.url_name == 'about' %}active{% endif %}">
+                    <a href="{% url 'about' %}">About</a>
+                </li>
+                <li class="{% if request.resolver_match.url_name == 'faq' %}active{% endif %}">
+                    <a href="{% url 'faq' %}">FAQs</a>
+                </li>
             </ul>
+
             <div class="header-actions">
-                <i class="fas fa-search search-icon"></i>
-                <i class="fas fa-shopping-cart cart-icon"></i>
-                <a href="{% url 'login' %}" title="Login / Register">
-                   <i class="fas fa-user user-icon"></i>
-                </a>
+
+                <form method="GET" action="{% url 'product_list' %}" onsubmit="return checkSearch(this);">
+                    <input type="text" name="q" placeholder="Search products, categories, artisans..." value="{{ request.GET.q|default:'' }}">
+                    <button type="submit"><i class="fas fa-search"></i></button>
+                </form>
+
+                <script>
+                    function checkSearch(form) {
+                        const query = form.q.value.trim();
+                        if (!query) {
+                            alert("Please type something to search!");
+                            return false;
+                        }
+                        return true;
+                    }
+                </script>
+
+                <!-- Cart Icon (only for logged-in users) -->
+                {% if request.user.is_authenticated %}
+                    <a href="{% url 'cart_detail' %}">
+                        <i class="fas fa-shopping-cart cart-icon"></i>
+                        {% if cart.items_count %}
+                            <span class="cart-count">{{ cart.items_count }}</span>
+                        {% endif %}
+                    </a>
+                {% endif %}
+
+                <!-- Profile / Login -->
+                <div class="user-profile">
+                    {% if request.user.is_authenticated %}
+                        <div class="profile-menu">
+                            <i class="fas fa-user user-icon"></i>
+                            <span class="profile-name">{{ request.user.first_name|default:request.user.username }}</span>
+                            <div class="profile-dropdown">
+                                <ul>
+                                    <li><a href="{% url 'profile' %}"><i class="fas fa-user"></i> My Profile</a></li>
+                                    <li><a href="{% url 'dashboard' %}"><i class="fas fa-store"></i> Dashboard</a></li>
+                                    <li><a href="{% url 'wishlist' %}"><i class="fas fa-heart"></i> Wishlist</a></li>
+
+                                    <li><a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    {% else %}
+                        <a href="{% url 'login' %}" title="Login / Register">
+                            <i class="fas fa-user user-icon"></i>
+                        </a>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </header>
 
     <!-- Main Content -->
     <main>
-        {% block content %}
-        <!-- Page specific content goes here -->
-        {% endblock %}
+        {% block content %}{% endblock %}
     </main>
 
     <!-- Footer -->
@@ -117,10 +205,9 @@
                 <h3>Quick Links</h3>
                 <ul>
                     <li><a href="{% url 'about' %}">About Us</a></li>
-                    <li><a href="#">Shop</a></li>
-                    <li><a href="#">Stories</a></li>
-                    <li><a href="#">Become an Artisan</a></li>
-                    <li><a href="#">FAQs</a></li>
+                    <li><a href="{% url 'register' %}">Become an Artisan</a></li>
+                    <li><a href="{% url 'stories' %}">Stories</a></li>
+                    <li><a href="{% url 'faq' %}">FAQs</a></li>
                 </ul>
             </div>
             <div class="footer-links">
@@ -154,5 +241,20 @@
     </footer>
 
     {% block extra_js %}{% endblock %}
+
+    <script>
+        // Profile dropdown toggle
+        const profileMenu = document.querySelector('.profile-menu');
+        if(profileMenu){
+            profileMenu.addEventListener('click', function(e){
+                e.stopPropagation();
+                profileMenu.classList.toggle('active');
+            });
+
+            document.addEventListener('click', function(){
+                profileMenu.classList.remove('active');
+            });
+        }
+    </script>
 </body>
 </html>

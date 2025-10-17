@@ -6,99 +6,88 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 :root {
-    --primary: #D35400;
-    --secondary: #27AE60;
-    --accent: #E67E22;
-    --light: #FEF5E7;
-    --dark: #2C3E50;
-    --text: #333333;
-    --text-light: #777777;
-    --white: #FFFFFF;
-    --gray: #f5f5f5;
-    --border: #e0e0e0;
+    --primary:#D35400;
+    --secondary:#27AE60;
+    --accent:#E67E22;
+    --light:#FEF5E7;
+    --dark:#2C3E50;
+    --text:#333333;
+    --text-light:#777777;
+    --white:#FFFFFF;
+    --gray:#f5f5f5;
+    --border:#e0e0e0;
 }
 
-* { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-body { color: var(--text); background-color: var(--white); line-height: 1.6; }
-.container { width:100%; max-width:1200px; margin:0 auto; padding:0 20px; }
+/* Global */
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;}
+body{color:var(--text);background-color:var(--white);line-height:1.6;}
+.container{width:100%;max-width:1200px;margin:0 auto;padding:0 20px;}
 
 /* Buttons */
-.btn { display:inline-block; padding:12px 28px; border-radius:50px; text-decoration:none; font-weight:600; transition: all 0.3s ease; cursor:pointer; border:none; font-size:1rem; }
-.btn-primary { background-color: var(--primary); color: var(--white); border:2px solid var(--primary); }
-.btn-primary:hover { background-color:transparent; color: var(--primary); }
-.btn-secondary { background-color:transparent; color: var(--primary); border:2px solid var(--primary); }
-.btn-secondary:hover { background-color: var(--primary); color: var(--white); }
+.btn{display:inline-block;padding:12px 28px;border-radius:50px;text-decoration:none;font-weight:600;transition:all 0.3s ease;cursor:pointer;border:none;font-size:1rem;}
+.btn-primary{background-color:var(--primary);color:var(--white);border:2px solid var(--primary);}
+.btn-primary:hover{background-color:transparent;color:var(--primary);}
+.btn-secondary{background-color:transparent;color:var(--primary);border:2px solid var(--primary);}
+.btn-secondary:hover{background-color:var(--primary);color:var(--white);}
 
-/* Breadcrumb */
-.breadcrumb { padding:20px 0; background-color: var(--gray); }
-.breadcrumb-content { display:flex; align-items:center; font-size:0.9rem; }
-.breadcrumb-content a { color: var(--text-light); text-decoration:none; }
-.breadcrumb-content a:hover { color: var(--primary); }
-.breadcrumb-divider { margin:0 10px; color: var(--text-light); }
+/* Filters & Header */
+.products-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;flex-wrap:wrap;gap:15px;}
+.products-title{font-size:1.8rem;color:var(--dark);}
+.products-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.search-bar{padding:10px 15px;border:1px solid var(--border);border-radius:5px;width:220px;}
+.sort-select,.filter-select{padding:10px 15px;border:1px solid var(--border);border-radius:5px;background:var(--white);color:var(--text);cursor:pointer;}
 
-/* Products Section */
-.products-section { padding:40px 0; }
-.products-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:30px; flex-wrap:wrap; gap:20px; }
-.products-title { font-size:1.8rem; color:var(--dark); }
-.products-controls { display:flex; gap:15px; align-items:center; flex-wrap:wrap; }
-.sort-select, .filter-select { padding:10px 15px; border:1px solid var(--border); border-radius:5px; background: var(--white); color:var(--text); cursor:pointer; }
+/* Product Grid */
+.products-section{padding:60px 0;background:var(--white);}
+.products-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:25px;}
 
-/* Card-style products */
-.products-grid { display:flex; flex-wrap:wrap; gap:20px; justify-content:flex-start; }
-.product-card { width: calc(25% - 20px); background: var(--white); border-radius:15px; overflow:hidden; box-shadow:0 5px 15px rgba(0,0,0,0.05); transition: transform 0.3s; position: relative; display:flex; flex-direction:column; }
-.product-card:hover { transform:translateY(-5px); }
-.product-image { width:100%; height:200px; overflow:hidden; position:relative; }
-.product-image img { width:100%; height:100%; object-fit:cover; transition: transform 0.5s; }
-.product-card:hover .product-image img { transform:scale(1.05); }
-.product-badge { position:absolute; top:10px; left:10px; background:var(--primary); color:var(--white); padding:5px 10px; border-radius:20px; font-size:0.8rem; font-weight:600; }
-.product-wishlist { position:absolute; top:10px; right:10px; background:rgba(255,255,255,0.8); width:35px; height:35px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; transition: all 0.3s; }
-.product-wishlist:hover { background: var(--primary); color:var(--white); }
-.product-content { padding:15px; flex:1; display:flex; flex-direction:column; justify-content:space-between; }
-.product-category { color: var(--text-light); font-size:0.85rem; margin-bottom:5px; }
-.product-name { font-size:1.05rem; font-weight:600; margin-bottom:8px; color: var(--dark); }
-.product-artisan { color: var(--text-light); font-size:0.85rem; margin-bottom:10px; }
-.product-rating { display:flex; align-items:center; margin-bottom:10px; }
-.rating-stars { color:#FFC107; margin-right:5px; }
-.rating-count { color: var(--text-light); font-size:0.8rem; }
-.product-price { display:flex; align-items:center; justify-content:space-between; margin-top:auto; }
-.price { font-size:1.15rem; font-weight:700; color: var(--primary); }
-.original-price { text-decoration:line-through; color: var(--text-light); font-size:0.85rem; margin-left:5px; }
-.add-to-cart { background:var(--primary); color:var(--white); border:none; width:35px; height:35px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; transition: all 0.3s; }
-.add-to-cart:hover { background: var(--accent); transform:scale(1.1); }
+/* Card Style (Same as Home) */
+.product-card{background:var(--white);border-radius:15px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.08);transition:transform 0.3s,box-shadow 0.3s;position:relative;display:flex;flex-direction:column;}
+.product-card:hover{transform:translateY(-6px);box-shadow:0 8px 20px rgba(0,0,0,0.12);}
+.product-image{width:100%;height:220px;overflow:hidden;position:relative;}
+.product-image img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s;}
+.product-card:hover .product-image img{transform:scale(1.05);}
+.product-wishlist{position:absolute;top:10px;right:10px;background:rgba(255,255,255,0.85);width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--primary);cursor:pointer;transition:all 0.3s;}
+.product-wishlist:hover{background:var(--primary);color:white;}
+.product-content{padding:18px 15px;flex:1;display:flex;flex-direction:column;justify-content:space-between;}
+.product-name{font-size:1.05rem;font-weight:600;color:var(--dark);margin-bottom:8px;}
+.product-artisan{font-size:0.85rem;color:var(--text-light);margin-bottom:10px;}
+.product-category{font-size:0.8rem;color:var(--secondary);font-weight:500;margin-bottom:5px;}
+.product-rating{display:flex;align-items:center;margin-bottom:8px;}
+.product-rating i{color:#FFC107;margin-right:3px;}
+.rating-count{color:var(--text-light);font-size:0.8rem;}
+.product-price{display:flex;align-items:center;justify-content:space-between;margin-top:auto;}
+.price{font-size:1.2rem;font-weight:700;color:var(--primary);}
+.original-price{text-decoration:line-through;color:var(--text-light);font-size:0.9rem;margin-left:6px;}
+.add-to-cart{background:var(--primary);color:white;border:none;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.3s;}
+.add-to-cart:hover{background:var(--accent);transform:scale(1.1);}
 
-/* Responsive */
-@media (max-width: 1024px) {
-    .product-card { width: calc(33.33% - 20px); }
-}
-@media (max-width: 768px) {
-    .product-card { width: calc(50% - 20px); }
-}
-@media (max-width: 480px) {
-    .product-card { width: 100%; }
+@media(max-width:768px){
+    .products-header{flex-direction:column;align-items:flex-start;}
+    .search-bar{width:100%;}
 }
 </style>
 {% endblock %}
 
 {% block content %}
-
-
 <section class="products-section">
     <div class="container">
         <form method="get" class="products-header">
-            <h2 class="products-title">Handmade Products</h2>
+            <h2 class="products-title">All Handmade Products</h2>
             <div class="products-controls">
-                <select name="sort" class="sort-select">
-                    <option value="">Sort by: Featured</option>
-                    <option value="price_asc" {% if request.GET.sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
-                    <option value="price_desc" {% if request.GET.sort == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
-                    <option value="newest" {% if request.GET.sort == 'newest' %}selected{% endif %}>Newest First</option>
-                    <option value="best_rated" {% if request.GET.sort == 'best_rated' %}selected{% endif %}>Best Rated</option>
-                </select>
+                <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search products..." class="search-bar">
                 <select name="category" class="filter-select">
                     <option value="">All Categories</option>
                     {% for cat in categories %}
                         <option value="{{ cat.id }}" {% if request.GET.category|stringformat:"s" == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
                     {% endfor %}
+                </select>
+                <select name="sort" class="sort-select">
+                    <option value="">Sort by: Featured</option>
+                    <option value="price_asc" {% if request.GET.sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+                    <option value="price_desc" {% if request.GET.sort == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+                    <option value="newest" {% if request.GET.sort == 'newest' %}selected{% endif %}>Newest</option>
+                    <option value="best_rated" {% if request.GET.sort == 'best_rated' %}selected{% endif %}>Best Rated</option>
                 </select>
                 <button type="submit" class="btn btn-primary">Apply</button>
             </div>
@@ -113,44 +102,56 @@ body { color: var(--text); background-color: var(--white); line-height: 1.6; }
                     {% else %}
                         <img src="{% static 'images/default-product.jpg' %}" alt="{{ product.name }}">
                     {% endif %}
-                    {% if product.is_new %}<div class="product-badge">New</div>{% elif product.is_on_sale %}<div class="product-badge">Sale</div>{% elif product.is_featured %}<div class="product-badge">Popular</div>{% endif %}
-                    <div class="product-wishlist"><i class="far fa-heart"></i></div>
+                    {% if product.id in user_wishlist_ids %}
+<a href="{% url 'remove_from_wishlist' product.id %}" class="product-wishlist active">
+    <i class="fas fa-heart"></i>
+</a>
+{% else %}
+<a href="{% url 'add_to_wishlist' product.id %}" class="product-wishlist">
+    <i class="far fa-heart"></i>
+</a>
+{% endif %}
                 </div>
+
                 <div class="product-content">
                     <div class="product-category">{{ product.category.name|default:"Uncategorized" }}</div>
                     <h3 class="product-name">{{ product.name }}</h3>
                     <div class="product-artisan">By: {{ product.artisan.shop_name }}</div>
                     <div class="product-rating">
-                        {% for _ in product.rating|floatformat:0|times %}<i class="fas fa-star"></i>{% endfor %}
-                        {% for _ in 5|floatformat:0|add:"-{{ product.rating|floatformat:0 }}"|times %}<i class="far fa-star"></i>{% endfor %}
-                        <span class="rating-count">({{ product.rating_count }})</span>
+                        {% for _ in product.star_list.full %}<i class="fas fa-star"></i>{% endfor %}
+                        {% for _ in product.star_list.half %}<i class="fas fa-star-half-alt"></i>{% endfor %}
+                        {% for _ in product.star_list.empty %}<i class="far fa-star"></i>{% endfor %}
+                        <span class="rating-count">({{ product.rating|default:"0" }})</span>
                     </div>
                     <div class="product-price">
-                        <div class="price">৳ {{ product.discount_price|default:product.price }} {% if product.discount_price %}<span class="original-price">৳ {{ product.price }}</span>{% endif %}</div>
-                        <button class="add-to-cart"><i class="fas fa-shopping-cart"></i></button>
+                        <div>
+                            <span class="price">৳ {{ product.discount_price|default:product.price }}</span>
+                            {% if product.discount_price %}
+                            <span class="original-price">৳ {{ product.price }}</span>
+                            {% endif %}
+                        </div>
+                        <form action="{% url 'add_to_cart' product.id %}" method="POST" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="add-to-cart"><i class="fas fa-shopping-cart"></i></button>
+                        </form>
                     </div>
                 </div>
             </div>
+            {% empty %}
+            <p style="grid-column:1/-1;text-align:center;color:var(--text-light);font-size:1.1rem;">No products found.</p>
             {% endfor %}
         </div>
     </div>
 </section>
 
 <script>
-document.querySelectorAll('.product-wishlist').forEach(wishlist => {
-    wishlist.addEventListener('click', function() {
-        const icon = this.querySelector('i');
+document.querySelectorAll('.product-wishlist').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+        const icon=btn.querySelector('i');
         icon.classList.toggle('fas');
         icon.classList.toggle('far');
-        this.style.background = icon.classList.contains('fas') ? 'var(--primary)' : 'rgba(255,255,255,0.8)';
-        this.style.color = icon.classList.contains('fas') ? 'white' : '';
-    });
-});
-
-document.querySelectorAll('.add-to-cart').forEach(button => {
-    button.addEventListener('click', function() {
-        const productName = this.closest('.product-card').querySelector('.product-name').textContent;
-        alert(`${productName} added to cart!`);
+        btn.style.background=icon.classList.contains('fas')?'var(--primary)':'rgba(255,255,255,0.85)';
+        btn.style.color=icon.classList.contains('fas')?'white':'var(--primary)';
     });
 });
 </script>

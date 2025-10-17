@@ -4,80 +4,85 @@
 {% block title %}Register - SokherBazar{% endblock %}
 
 {% block content %}
-<section class="auth-container">
+<section class="auth-container" style="padding: 80px 0; background-color: #FEF5E7;">
     <div class="container">
-        <div class="auth-form-container">
-            <div class="auth-header">
-                <h2>Create an Account</h2>
-                <p>Join SokherBazar to support traditional artisans</p>
+        <div class="auth-form-container" style="max-width: 500px; margin: 0 auto; background-color: white; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); overflow: hidden;">
+            <div class="auth-header" style="background: linear-gradient(to right, #D35400, #E67E22); color: white; padding: 30px 20px; text-align: center;">
+                <h2 style="margin: 0 0 10px 0; font-size: 2rem;">Create an Account</h2>
+                <p style="margin: 0; opacity: 0.9;">Join SokherBazar to support traditional artisans</p>
             </div>
-            <form class="auth-form" id="register-form" method="POST" enctype="multipart/form-data" action="{% url 'register' %}">
+
+            <form class="auth-form" id="register-form" method="POST" enctype="multipart/form-data" action="{% url 'register' %}" style="padding: 30px;">
                 {% csrf_token %}
 
-                <div class="user-type-selector">
-                    <div class="user-type-btn active" data-type="buyer">
-                        <i class="fas fa-shopping-cart"></i><span>Buyer</span>
-                    </div>
-                    <div class="user-type-btn" data-type="seller">
-                        <i class="fas fa-store"></i><span>Seller</span>
-                    </div>
+
+
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label for="register-name" style="display: block; margin-bottom: 8px; font-weight: 600; color: #2C3E50;">Full Name</label>
+                    <input type="text" class="form-control" id="register-name" name="full_name" placeholder="Enter your full name" required
+                           style="width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem; transition: border 0.3s;">
                 </div>
 
-                <div class="form-group">
-                    <label for="register-name">Full Name</label>
-                    <input type="text" class="form-control" id="register-name" name="full_name" placeholder="Enter your full name" required>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label for="register-email" style="display: block; margin-bottom: 8px; font-weight: 600; color: #2C3E50;">Email Address</label>
+                    <input type="email" class="form-control" id="register-email" name="email" placeholder="Enter your email" required
+                           style="width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem; transition: border 0.3s;">
                 </div>
 
-                <div class="form-group">
-                    <label for="register-email">Email Address</label>
-                    <input type="email" class="form-control" id="register-email" name="email" placeholder="Enter your email" required>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label for="register-password" style="display: block; margin-bottom: 8px; font-weight: 600; color: #2C3E50;">Password</label>
+                    <input type="password" class="form-control" id="register-password" name="password" placeholder="Create a password" required
+                           style="width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem; transition: border 0.3s;">
+                    <div class="form-text" style="font-size: 0.85rem; color: #777777; margin-top: 5px;">Must be at least 8 characters</div>
                 </div>
 
-                <div class="form-group">
-                    <label for="register-password">Password</label>
-                    <input type="password" class="form-control" id="register-password" name="password" placeholder="Create a password" required>
-                    <div class="form-text">Must be at least 8 characters</div>
-                </div>
-
-                <div class="form-group">
-                    <label for="register-confirm-password">Confirm Password</label>
-                    <input type="password" class="form-control" id="register-confirm-password" name="confirm_password" placeholder="Confirm your password" required>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label for="register-confirm-password" style="display: block; margin-bottom: 8px; font-weight: 600; color: #2C3E50;">Confirm Password</label>
+                    <input type="password" class="form-control" id="register-confirm-password" name="confirm_password" placeholder="Confirm your password" required
+                           style="width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem; transition: border 0.3s;">
                 </div>
 
                 <!-- Seller Fields -->
-                <div id="seller-fields" class="hidden">
-                    <div class="form-note">
+                <div id="seller-fields" style="display: none; margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
+                    <div class="form-note" style="background-color: #FEF5E7; padding: 12px; border-radius: 5px; margin-bottom: 20px; color: #D35400;">
                         <i class="fas fa-info-circle"></i> Seller accounts require verification. Please upload your NID.
                     </div>
-                    <div class="form-group">
-                        <label for="shop-name">Shop Name</label>
-                        <input type="text" class="form-control" id="shop-name" name="shop_name" placeholder="Enter your shop name">
+
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label for="shop-name" style="display: block; margin-bottom: 8px; font-weight: 600; color: #2C3E50;">Shop Name</label>
+                        <input type="text" class="form-control" id="shop-name" name="shop_name" placeholder="Enter your shop name"
+                               style="width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem; transition: border 0.3s;">
                     </div>
-                    <div class="form-group">
-                        <label for="phone-number">Phone Number</label>
-                        <input type="tel" class="form-control" id="phone-number" name="phone_number" placeholder="Enter your phone number">
+
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label for="phone-number" style="display: block; margin-bottom: 8px; font-weight: 600; color: #2C3E50;">Phone Number</label>
+                        <input type="tel" class="form-control" id="phone-number" name="phone_number" placeholder="Enter your phone number"
+                               style="width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem; transition: border 0.3s;">
                     </div>
-                    <div class="form-group">
-                        <label>NID Document Upload</label>
-                        <div class="file-upload" id="nid-upload">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                            <p>Click to upload NID photo</p>
-                            <p class="file-name" id="nid-file-name">No file chosen</p>
-                            <input type="file" id="nid-document" name="nid_document" accept="image/*">
+
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #2C3E50;">NID Document Upload</label>
+                        <div class="file-upload" id="nid-upload"
+                             style="border: 2px dashed #ddd; border-radius: 5px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s;">
+                            <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: #777777; margin-bottom: 10px;"></i>
+                            <p style="margin: 0 0 5px 0; color: #2C3E50;">Click to upload NID photo</p>
+                            <p class="file-name" id="nid-file-name" style="margin: 0; font-size: 0.9rem; color: #777777;">No file chosen</p>
+                            <input type="file" id="nid-document" name="nid_document" accept="image/*" style="display: none;">
                         </div>
-                        <div class="form-text">Upload a clear photo of your National ID card</div>
+                        <div class="form-text" style="font-size: 0.85rem; color: #777777; margin-top: 5px;">Upload a clear photo of your National ID card</div>
                     </div>
                 </div>
 
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="terms-agree" required>
-                    <label for="terms-agree">I agree to the <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a></label>
+                <div class="form-check" style="margin-bottom: 20px; display: flex; align-items: flex-start;">
+                    <input type="checkbox" class="form-check-input" id="terms-agree" required
+                           style="margin-right: 10px; margin-top: 3px;">
+                    <label for="terms-agree" style="color: #2C3E50;">I agree to the <a href="#" style="color: #27AE60; text-decoration: none;">Terms & Conditions</a> and <a href="#" style="color: #27AE60; text-decoration: none;">Privacy Policy</a></label>
                 </div>
 
-                <button type="submit" class="btn btn-primary" style="width:100%;">Create Account</button>
+                <button type="submit" class="btn btn-primary" style="width:100%; padding: 12px; background-color: #D35400; color: white; border: none; border-radius: 50px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s;">Create Account</button>
 
-                <div class="form-footer">
-                    <p>Already have an account? <a href="{% url 'login' %}">Login now</a></p>
+                <div class="form-footer" style="text-align: center; margin-top: 20px;">
+                    <p style="margin: 10px 0; color: #777777;">Already have an account? <a href="{% url 'login' %}" style="color: #27AE60; font-weight: 600; text-decoration: none;">Login now</a></p>
                 </div>
             </form>
         </div>
@@ -87,23 +92,47 @@
 
 {% block scripts %}
 <script>
-const userTypeBtns=document.querySelectorAll('.user-type-btn');
-const sellerFields=document.getElementById('seller-fields');
-const nidDocument=document.getElementById('nid-document');
-const nidFileName=document.getElementById('nid-file-name');
+const userTypeBtns = document.querySelectorAll('.user-type-btn');
+const sellerFields = document.getElementById('seller-fields');
+const nidDocument = document.getElementById('nid-document');
+const nidFileName = document.getElementById('nid-file-name');
+const userTypeInput = document.getElementById('user_type_input');
+const nidUpload = document.getElementById('nid-upload');
 
-userTypeBtns.forEach(btn=>{
-    btn.addEventListener('click',()=>{
-        userTypeBtns.forEach(b=>b.classList.remove('active'));
-        btn.classList.add('active');
-        if(btn.dataset.type==='seller'){sellerFields.classList.remove('hidden');}
-        else{sellerFields.classList.add('hidden');}
+userTypeBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        userTypeBtns.forEach(b => {
+            b.style.backgroundColor = '#ddd';
+            b.style.color = '#2C3E50';
+        });
+        btn.style.backgroundColor = '#27AE60';
+        btn.style.color = 'white';
+
+        if (btn.dataset.type === 'seller') {
+            sellerFields.style.display = 'block';
+            userTypeInput.value = 'artisan';
+        } else {
+            sellerFields.style.display = 'none';
+            userTypeInput.value = 'customer';
+        }
     });
 });
 
-nidDocument.addEventListener('change',(e)=>{
-    const file=e.target.files[0];
-    nidFileName.textContent=file?file.name:'No file chosen';
+nidUpload.addEventListener('click', () => {
+    nidDocument.click();
+});
+
+nidDocument.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    nidFileName.textContent = file ? file.name : 'No file chosen';
+
+    if (file) {
+        nidUpload.style.borderColor = '#27AE60';
+        nidUpload.style.backgroundColor = '#F8FFF8';
+    } else {
+        nidUpload.style.borderColor = '#ddd';
+        nidUpload.style.backgroundColor = 'transparent';
+    }
 });
 </script>
 {% endblock %}
