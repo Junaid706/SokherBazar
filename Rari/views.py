@@ -8,10 +8,22 @@ from django.db.models import Q
 from math import floor
 from django.views.generic import DetailView
 from django.http import JsonResponse
-
+from decimal import Decimal, InvalidOperation
 from .models import Product, Wishlist, Category, Artisan, Story, Order, OrderItem, Customer
-
-
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import ContactMessage
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
+from django.views.decorators.http import require_POST
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
+from django.views.decorators.http import require_POST
+from django.db import transaction
+from django.db.models import F
+from django.urls import reverse
+from django.utils.http import url_has_allowed_host_and_scheme
+from django.conf import settings
 # -------------------- HOME --------------------
 def home(request):
     query = request.GET.get("q", "")
@@ -118,24 +130,28 @@ def product_list(request):
 # -------------------- PRODUCT DETAIL --------------------
 def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
-
-    full_stars = int(floor(product.rating))
-    half_star = 1 if (product.rating - full_stars) >= 0.5 else 0
-    empty_stars = 5 - full_stars - half_star
-    product.star_list = {
-        'full': range(full_stars),
-        'half': range(half_star),
-        'empty': range(empty_stars),
-    }
-
     related_products = Product.objects.filter(category=product.category).exclude(id=product.id)[:4]
 
+    # --- Compute savings and discount percent safely ---
+    savings = None
+    discount_percent = None
+    try:
+        if product.discount_price and product.price:
+            base = Decimal(str(product.price))
+            disc = Decimal(str(product.discount_price))
+            savings = base - disc
+            if base > 0:
+                discount_percent = int((savings / base * 100).quantize(Decimal('1')))
+    except (InvalidOperation, TypeError, ValueError):
+        pass
+
     context = {
-        'product': product,
-        'related_products': related_products,
+        "product": product,
+        "related_products": related_products,
+        "savings": savings,
+        "discount_percent": discount_percent,
     }
     return render(request, "product_detail.html", context)
-
 
 # -------------------- ARTISAN DETAIL --------------------
 class ArtisanDetailView(DetailView):
@@ -168,20 +184,53 @@ def cart_detail(request):
     return render(request, "cart_detail.html", {"order": order, "total": total})
 
 
+@require_POST
+
 def add_to_cart(request, product_id):
     if not request.user.is_authenticated:
         messages.warning(request, "Please log in to add products to your cart.")
         return redirect('login')
 
     product = get_object_or_404(Product, id=product_id)
-    customer = get_object_or_404(Customer, user=request.user)
+
+    # Optional: block adding out-of-stock items
+    if hasattr(product, "in_stock") and not product.in_stock:
+        messages.error(request, "Sorry, this item is currently out of stock.")
+        return redirect(request.META.get('HTTP_REFERER', reverse('product_list')))
+
+    # Quantity from form (default 1, clamp to sane bounds)
+    try:
+        qty = int(request.POST.get('quantity', 1))
+    except (TypeError, ValueError):
+        qty = 1
+    qty = max(1, min(qty, 999))
+
+    # Ensure Customer + Pending Order
+    customer, _ = Customer.objects.get_or_create(user=request.user)
     order, _ = Order.objects.get_or_create(customer=customer, status="Pending")
-    order_item, item_created = OrderItem.objects.get_or_create(order=order, product=product)
-    if not item_created:
-        order_item.quantity += 1
-        order_item.save()
-    messages.success(request, f"{product.name} added to cart.")
-    return redirect(request.META.get('HTTP_REFERER', 'product_list'))
+
+    # Concurrency-safe increment
+    with transaction.atomic():
+        order_item, created = OrderItem.objects.select_for_update().get_or_create(
+            order=order, product=product, defaults={"quantity": 0}
+        )
+        order_item.quantity = F('quantity') + qty
+        order_item.save(update_fields=["quantity"])
+        # Optional: refresh if you need the actual integer now
+        # order_item.refresh_from_db(fields=["quantity"])
+
+    messages.success(request, f"Added {qty} × {product.name} to your cart.")
+
+    # Safer redirect: ?next=... > Referer > product_list
+    next_url = request.POST.get('next') or request.GET.get('next')
+    if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}):
+        return redirect(next_url)
+
+    referer = request.META.get('HTTP_REFERER')
+    if referer and url_has_allowed_host_and_scheme(referer, allowed_hosts={request.get_host()}):
+        return redirect(referer)
+
+    return redirect('product_list')
 
 
 def remove_from_cart(request, order_item_id):
@@ -211,6 +260,39 @@ def about(request):
 
 
 def contact(request):
+    if request.method == "POST":
+        name = (request.POST.get("name") or "").strip()
+        email = (request.POST.get("email") or "").strip()
+        message_text = (request.POST.get("message") or "").strip()
+
+        # Simple validation
+        if not name or not email or not message_text:
+            messages.error(request, "Please fill out all fields.")
+            return render(request, "contact.html")
+
+        try:
+            validate_email(email)
+        except ValidationError:
+            messages.error(request, "Please enter a valid email address.")
+            return render(request, "contact.html")
+
+        # Save to DB (shows up in Admin)
+        ContactMessage.objects.create(
+            name=name, email=email, message=message_text
+        )
+
+        # (Optional) Notify admin by email
+        # send_mail(
+        #     subject=f"New contact from {name}",
+        #     message=f"From: {name} <{email}>\n\n{message_text}",
+        #     from_email=settings.DEFAULT_FROM_EMAIL,
+        #     recipient_list=[settings.DEFAULT_FROM_EMAIL],  # or a specific admin email
+        #     fail_silently=True,
+        # )
+
+        messages.success(request, "Thanks! Your message has been sent.")
+        return redirect("contact")  # PRG pattern to avoid resubmission
+
     return render(request, "contact.html")
 
 

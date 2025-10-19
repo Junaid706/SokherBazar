@@ -1,260 +1,208 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}SokherBazar{% endblock %}</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* --- Color Scheme --- */
-        :root {
-            --primary: #D35400;
-            --secondary: #27AE60;
-            --accent: #E67E22;
-            --light: #FEF5E7;
-            --dark: #2C3E50;
-            --text: #333333;
-            --text-light: #777777;
-            --white: #FFFFFF;
+  {% load static %}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}SokherBazar{% endblock %}</title>
+
+  <!-- Tailwind (Play CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#D35400',
+            secondary: '#27AE60',
+            accent: '#E67E22',
+            dark: '#2C3E50'
+          }
         }
+      }
+    }
+  </script>
 
-        .nav-menu li.active a {
-            color: var(--primary);
-            font-weight: 600;
-        }
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-        * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { color: var(--text); background-color: var(--white); line-height:1.6; }
+  <!-- Optional: your legacy CSS variables (kept for color refs) -->
+  <style>
+    :root{
+      --primary:#D35400;--secondary:#27AE60;--accent:#E67E22;--light:#FEF5E7;
+      --dark:#2C3E50;--text:#333;--text-light:#777;--white:#fff;
+    }
+  </style>
 
-        .container { width:100%; max-width:1200px; margin:0 auto; padding:0 20px; }
-
-        /* Buttons */
-        .btn { display:inline-block; padding:12px 28px; border-radius:50px; text-decoration:none; font-weight:600; transition: all 0.3s ease; cursor:pointer; }
-        .btn-primary { background-color: var(--primary); color: var(--white); border: 2px solid var(--primary); }
-        .btn-primary:hover { background-color: transparent; color: var(--primary); }
-        .btn-secondary { background-color: transparent; color: var(--primary); border:2px solid var(--primary); }
-        .btn-secondary:hover { background-color: var(--primary); color: var(--white); }
-
-        /* Section Title */
-        .section-title { font-size:2.2rem; text-align:center; margin-bottom:2.5rem; color: var(--dark); position: relative; }
-        .section-title:after { content:''; display:block; width:80px; height:4px; background: var(--primary); margin:10px auto; border-radius:2px; }
-
-        /* Header */
-        header { background-color: var(--white); box-shadow:0 2px 10px rgba(0,0,0,0.1); position:sticky; top:0; z-index:100; }
-        .header-container { display:flex; justify-content:space-between; align-items:center; padding:15px 0; }
-        .logo { display:flex; align-items:center; text-decoration:none; }
-        .logo-img { width:45px; height:45px; display:flex; align-items:center; justify-content:center; border-radius:50%; background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%); margin-right:12px; color:white; font-size:20px; font-weight:bold; }
-        .logo-text { font-size:1.8rem; font-weight:700; color: var(--primary); }
-        .nav-menu { display:flex; list-style:none; }
-        .nav-menu li { margin-left:25px; }
-        .nav-menu a { text-decoration:none; color: var(--text); font-weight:500; transition:color 0.3s; }
-        .nav-menu a:hover { color: var(--primary); }
-        .header-actions { display:flex; align-items:center; }
-
-        /* Profile Dropdown */
-        .user-profile { position: relative; display: flex; align-items: center; cursor: pointer; }
-        .profile-name { margin-left: 8px; font-weight: 500; color: var(--dark); }
-        .profile-dropdown {
-            display: none;
-            position: absolute;
-            top: 45px;
-            right: 0;
-            background: var(--white);
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            z-index: 2000;
-            min-width: 150px;
-        }
-        .profile-dropdown ul { list-style:none; padding:10px 0; margin:0; }
-        .profile-dropdown ul li { padding:8px 20px; }
-        .profile-dropdown ul li a { color: var(--text); text-decoration:none; display:block; width:100%; transition: color 0.3s; }
-        .profile-dropdown ul li a:hover { color: var(--primary); }
-
-        .profile-menu.active .profile-dropdown {
-            display: block;
-        }
-
-        .search-icon, .cart-icon, .user-icon { font-size:1.2rem; margin-left:20px; color: var(--dark); cursor:pointer; position:relative; }
-        .cart-icon::after { content:'3'; position:absolute; top:-8px; right:-8px; background-color: var(--primary); color:white; font-size:0.7rem; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
-
-        /* Footer */
-        footer { background: var(--dark); color: var(--white); padding:60px 20px 20px; }
-        .footer-container { display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:40px; margin-bottom:40px; }
-        .footer-logo { display:flex; align-items:center; margin-bottom:15px; }
-        .footer-logo span { font-size:1.5rem; font-weight:bold; margin-left:10px; }
-        .footer-links ul { list-style:none; }
-        .footer-links ul li { margin-bottom:10px; }
-        .footer-links ul li a { text-decoration:none; color: var(--light); transition:color 0.3s; }
-        .footer-links ul li a:hover { color: var(--primary); }
-        .footer-social a { color: var(--light); font-size:1.3rem; margin-right:15px; transition: color 0.3s; }
-        .footer-social a:hover { color: var(--primary); }
-        .footer-bottom { text-align:center; font-size:0.9rem; color: var(--text-light); border-top:1px solid rgba(255,255,255,0.1); padding-top:20px; }
-
-        /* Responsive helpers */
-        @media(max-width:768px){
-            .nav-menu { flex-direction: column; position:absolute; top:65px; right:0; background: var(--white); width:200px; display:none; box-shadow:0 5px 15px rgba(0,0,0,0.1); }
-            .nav-menu li { margin:10px 0; }
-            .nav-menu.active { display:flex; }
-        }
-    </style>
-    {% block extra_css %}{% endblock %}
+  {% block extra_css %}{% endblock %}
 </head>
-<body>
-    <!-- Header -->
-    <header>
-        <div class="container header-container">
-            <a href="{% url 'home' %}" class="logo">
-                <div class="logo-img">SB</div>
-                <div class="logo-text">SokherBazar</div>
+<body class="text-[#333] bg-white">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-white shadow">
+    <div class=" mx-auto px-4 sm:px-6 lg:px-[250px] py-3 flex items-center justify-between">
+      <!-- Logo -->
+      <a href="{% url 'home' %}" class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-full bg-gradient-to-br from-primary to-accent text-white grid place-items-center font-bold">SB</div>
+        <div class="text-2xl font-bold text-primary">SokherBazar</div>
+      </a>
+
+      <!-- Nav -->
+      <ul class="hidden md:flex items-center gap-6 text-[15px]">
+        <li class="{% if request.resolver_match.url_name == 'home' %}text-primary font-semibold{% endif %}">
+          <a class="hover:text-primary" href="{% url 'home' %}">Home</a>
+        </li>
+        <li class="{% if request.resolver_match.url_name in 'product_list product_list_by_category product_detail' %}text-primary font-semibold{% endif %}">
+          <a class="hover:text-primary" href="{% url 'product_list' %}">Products</a>
+        </li>
+        <li class="{% if request.resolver_match.url_name == 'artisans' %}text-primary font-semibold{% endif %}">
+          <a class="hover:text-primary" href="{% url 'artisans' %}">Artisans</a>
+        </li>
+        <li class="{% if request.resolver_match.url_name == 'stories' %}text-primary font-semibold{% endif %}">
+          <a class="hover:text-primary" href="{% url 'stories' %}">Stories</a>
+        </li>
+        <li class="{% if request.resolver_match.url_name == 'contact' %}text-primary font-semibold{% endif %}">
+          <a class="hover:text-primary" href="{% url 'contact' %}">Contact</a>
+        </li>
+        <li class="{% if request.resolver_match.url_name == 'about' %}text-primary font-semibold{% endif %}">
+          <a class="hover:text-primary" href="{% url 'about' %}">About</a>
+        </li>
+        <li class="{% if request.resolver_match.url_name == 'faq' %}text-primary font-semibold{% endif %}">
+          <a class="hover:text-primary" href="{% url 'faq' %}">FAQs</a>
+        </li>
+      </ul>
+
+      <!-- Actions -->
+      <div class="flex items-center gap-4">
+        <!-- Search -->
+        <form method="GET" action="{% url 'product_list' %}" onsubmit="return checkSearch(this);" class="hidden sm:flex">
+          <input type="text" name="q"
+                 placeholder="Search..."
+                 value="{{ request.GET.q|default:'' }}"
+                 class="h-10 px-3 rounded-l-lg border border-gray-200 outline-none focus:ring-2 focus:ring-primary" />
+          <button type="submit" class="h-10 px-3 rounded-r-lg bg-primary text-white hover:bg-orange-600">
+            <i class="fas fa-search"></i>
+          </button>
+        </form>
+
+        <!-- Cart (only for logged-in users) -->
+        {% if request.user.is_authenticated %}
+          <a href="{% url 'cart_detail' %}" class="relative inline-flex items-center justify-center w-10 h-10 rounded-full border border-gray-200 hover:bg-gray-50">
+            <i class="fas fa-shopping-cart text-[15px]"></i>
+            {% if cart_count and cart_count > 0 %}
+              <span class="absolute -top-1 -right-1 min-w-[20px] h-[20px] px-1 rounded-full bg-primary text-white text-[11px] grid place-items-center leading-none">
+                {{ cart_count }}
+              </span>
+            {% endif %}
+          </a>
+        {% endif %}
+
+        <!-- Profile / Login -->
+        <div class="relative">
+          {% if request.user.is_authenticated %}
+            <button id="profileBtn" class="inline-flex items-center gap-2">
+              <i class="fas fa-user text-[15px]"></i>
+              <span class="hidden sm:inline text-sm font-medium text-[#2C3E50]">
+                {{ request.user.first_name|default:request.user.username }}
+              </span>
+            </button>
+            <div id="profileMenu" class="hidden absolute right-0 mt-2 w-44 bg-white border border-gray-200 rounded-lg shadow-lg">
+              <a class="block px-4 py-2 hover:bg-gray-50" href="{% url 'profile' %}"><i class="fas fa-user mr-2"></i> My Profile</a>
+              <a class="block px-4 py-2 hover:bg-gray-50" href="{% url 'dashboard' %}"><i class="fas fa-store mr-2"></i> Dashboard</a>
+              <a class="block px-4 py-2 hover:bg-gray-50" href="{% url 'wishlist' %}"><i class="fas fa-heart mr-2"></i> Wishlist</a>
+              <a class="block px-4 py-2 hover:bg-gray-50" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt mr-2"></i> Logout</a>
+            </div>
+          {% else %}
+            <a href="{% url 'login' %}" title="Login / Register" class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-gray-200 hover:bg-gray-50">
+              <i class="fas fa-user text-[15px]"></i>
             </a>
-            <ul class="nav-menu">
-                <li class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">
-                    <a href="{% url 'home' %}">Home</a>
-                </li>
-                <li class="{% if request.resolver_match.url_name in 'product_list product_list_by_category product_detail' %}active{% endif %}">
-                    <a href="{% url 'product_list' %}">Products</a>
-                </li>
-                <li class="{% if request.resolver_match.url_name == 'artisans' %}active{% endif %}">
-                    <a href="{% url 'artisans' %}">Artisans</a>
-                </li>
-                <li class="{% if request.resolver_match.url_name == 'stories' %}active{% endif %}">
-                    <a href="{% url 'stories' %}">Stories</a>
-                </li>
-                <li class="{% if request.resolver_match.url_name == 'contact' %}active{% endif %}">
-                    <a href="{% url 'contact' %}">Contact</a>
-                </li>
-                <li class="{% if request.resolver_match.url_name == 'about' %}active{% endif %}">
-                    <a href="{% url 'about' %}">About</a>
-                </li>
-                <li class="{% if request.resolver_match.url_name == 'faq' %}active{% endif %}">
-                    <a href="{% url 'faq' %}">FAQs</a>
-                </li>
-            </ul>
-
-            <div class="header-actions">
-
-                <form method="GET" action="{% url 'product_list' %}" onsubmit="return checkSearch(this);">
-                    <input type="text" name="q" placeholder="Search products, categories, artisans..." value="{{ request.GET.q|default:'' }}">
-                    <button type="submit"><i class="fas fa-search"></i></button>
-                </form>
-
-                <script>
-                    function checkSearch(form) {
-                        const query = form.q.value.trim();
-                        if (!query) {
-                            alert("Please type something to search!");
-                            return false;
-                        }
-                        return true;
-                    }
-                </script>
-
-                <!-- Cart Icon (only for logged-in users) -->
-                {% if request.user.is_authenticated %}
-                    <a href="{% url 'cart_detail' %}">
-                        <i class="fas fa-shopping-cart cart-icon"></i>
-                        {% if cart.items_count %}
-                            <span class="cart-count">{{ cart.items_count }}</span>
-                        {% endif %}
-                    </a>
-                {% endif %}
-
-                <!-- Profile / Login -->
-                <div class="user-profile">
-                    {% if request.user.is_authenticated %}
-                        <div class="profile-menu">
-                            <i class="fas fa-user user-icon"></i>
-                            <span class="profile-name">{{ request.user.first_name|default:request.user.username }}</span>
-                            <div class="profile-dropdown">
-                                <ul>
-                                    <li><a href="{% url 'profile' %}"><i class="fas fa-user"></i> My Profile</a></li>
-                                    <li><a href="{% url 'dashboard' %}"><i class="fas fa-store"></i> Dashboard</a></li>
-                                    <li><a href="{% url 'wishlist' %}"><i class="fas fa-heart"></i> Wishlist</a></li>
-
-                                    <li><a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    {% else %}
-                        <a href="{% url 'login' %}" title="Login / Register">
-                            <i class="fas fa-user user-icon"></i>
-                        </a>
-                    {% endif %}
-                </div>
-            </div>
+          {% endif %}
         </div>
-    </header>
+      </div>
+    </div>
+  </header>
 
-    <!-- Main Content -->
-    <main>
-        {% block content %}{% endblock %}
-    </main>
+  <!-- Flash messages (global) -->
+  {% if messages %}
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 space-y-2">
+      {% for message in messages %}
+        {% if message.tags == 'success' %}
+          <div class="rounded-lg border border-green-200 bg-green-50 text-green-800 px-4 py-3">{{ message }}</div>
+        {% elif message.tags == 'error' or message.tags == 'warning' %}
+          <div class="rounded-lg border border-red-200 bg-red-50 text-red-700 px-4 py-3">{{ message }}</div>
+        {% else %}
+          <div class="rounded-lg border border-gray-200 bg-gray-50 text-gray-700 px-4 py-3">{{ message }}</div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endif %}
 
-    <!-- Footer -->
-    <footer>
-        <div class="container footer-container">
-            <div>
-                <div class="footer-logo">
-                    <div class="logo-img">SB</div>
-                    <span>SokherBazar</span>
-                </div>
-                <p>Authentic handmade products from the heart of Bangladesh. Connecting artisans with the world.</p>
-            </div>
-            <div class="footer-links">
-                <h3>Quick Links</h3>
-                <ul>
-                    <li><a href="{% url 'about' %}">About Us</a></li>
-                    <li><a href="{% url 'register' %}">Become an Artisan</a></li>
-                    <li><a href="{% url 'stories' %}">Stories</a></li>
-                    <li><a href="{% url 'faq' %}">FAQs</a></li>
-                </ul>
-            </div>
-            <div class="footer-links">
-                <h3>Customer Service</h3>
-                <ul>
-                    <li><a href="{% url 'contact' %}">Contact Us</a></li>
-                    <li><a href="#">Shipping Info</a></li>
-                    <li><a href="#">Returns & Refunds</a></li>
-                    <li><a href="#">Track Order</a></li>
-                    <li><a href="#">Payment Options</a></li>
-                </ul>
-            </div>
-            <div>
-                <h3>Follow Us</h3>
-                <div class="footer-social">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-youtube"></i></a>
-                </div>
-                <h3 style="margin-top:20px;">Newsletter</h3>
-                <form>
-                    <input type="email" placeholder="Your email address" style="padding:10px; border:none; border-radius:5px 0 0 5px; width:70%;">
-                    <button type="submit" style="padding:10px 15px; border:none; border-radius:0 5px 5px 0; background-color: var(--primary); color:white; cursor:pointer;">Subscribe</button>
-                </form>
-            </div>
+  <!-- Main Content -->
+  <main class="min-h-[60vh]">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white mt-10">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 grid gap-8 md:grid-cols-3">
+      <div>
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-accent text-white grid place-items-center font-bold">SB</div>
+          <span class="text-xl font-bold">SokherBazar</span>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 SokherBazar. All rights reserved. Made with ❤️ in Bangladesh.</p>
+        <p class="text-white/80">Authentic handmade products from the heart of Bangladesh. Connecting artisans with the world.</p>
+      </div>
+
+      <div>
+        <h3 class="font-semibold mb-2">Quick Links</h3>
+        <ul class="space-y-2 text-white/80">
+          <li><a class="hover:text-primary" href="{% url 'about' %}">About Us</a></li>
+          <li><a class="hover:text-primary" href="{% url 'register' %}">Become an Artisan</a></li>
+          <li><a class="hover:text-primary" href="{% url 'stories' %}">Stories</a></li>
+          <li><a class="hover:text-primary" href="{% url 'faq' %}">FAQs</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="font-semibold mb-2">Follow Us</h3>
+        <div class="flex items-center gap-4 text-xl">
+          <a href="#" class="text-white/80 hover:text-primary"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="text-white/80 hover:text-primary"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="text-white/80 hover:text-primary"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="text-white/80 hover:text-primary"><i class="fab fa-youtube"></i></a>
         </div>
-    </footer>
 
-    {% block extra_js %}{% endblock %}
+        <h3 class="font-semibold mt-6 mb-2">Newsletter</h3>
+        <form class="flex">
+          <input type="email" placeholder="Your email address" class="h-10 px-3 rounded-l-md text-black outline-none" />
+          <button type="submit" class="h-10 px-3 rounded-r-md bg-primary hover:bg-orange-600">Subscribe</button>
+        </form>
+      </div>
+    </div>
+    <div class="text-center text-white/70 py-4 border-t border-white/10">
+      <p>&copy; 2025 SokherBazar. All rights reserved. Made with ❤️ in Bangladesh.</p>
+    </div>
+  </footer>
 
-    <script>
-        // Profile dropdown toggle
-        const profileMenu = document.querySelector('.profile-menu');
-        if(profileMenu){
-            profileMenu.addEventListener('click', function(e){
-                e.stopPropagation();
-                profileMenu.classList.toggle('active');
-            });
+  {% block extra_js %}{% endblock %}
 
-            document.addEventListener('click', function(){
-                profileMenu.classList.remove('active');
-            });
-        }
-    </script>
+  <script>
+    function checkSearch(form) {
+      const q = form.q.value.trim();
+      if (!q) { alert("Please type something to search!"); return false; }
+      return true;
+    }
+
+    // Profile dropdown
+    const btn = document.getElementById('profileBtn');
+    const menu = document.getElementById('profileMenu');
+    if (btn && menu) {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        menu.classList.toggle('hidden');
+      });
+      document.addEventListener('click', () => menu.classList.add('hidden'));
+    }
+  </script>
 </body>
 </html>

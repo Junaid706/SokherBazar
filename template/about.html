@@ -1,133 +1,136 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block title %}About — SokherBazar{% endblock %}
+
 {% block content %}
-<!-- Page-specific styles (scoped) -->
-<style>
-/* Scoped styles so it looks like your other pages */
-.about-page { color: #333; font-family: 'Segoe UI', Tahoma, Verdana, sans-serif; }
-.about-page .hero-section{
-  padding: 80px 0;
-  background: linear-gradient(rgba(255,255,255,0.95), rgba(255,255,255,0.95)), url("{% static 'images/about-hero.jpg' %}") center/cover no-repeat;
-  text-align: center;
-}
-.about-page .hero-title{ font-size: 2.8rem; color:#2C3E50; margin-bottom:12px; }
-.about-page .hero-subtitle{ font-size:1.05rem; color:#666; margin-bottom:24px; max-width:900px; margin-left:auto; margin-right:auto; }
-
-.about-page .mission-section{ padding: 60px 0; background:#FEF5E7; }
-.about-page .mission-container{ display:grid; grid-template-columns: 1fr 1fr; gap:32px; align-items:center; max-width:1200px; margin:0 auto; padding:0 20px; }
-.about-page .mission-image img{ width:100%; border-radius:10px; box-shadow:0 6px 20px rgba(0,0,0,0.08); }
-.about-page .mission-content h2{ color:#2C3E50; font-size:1.8rem; margin-bottom:12px; }
-.about-page .mission-content p{ color:#444; line-height:1.8; margin-bottom:12px; }
-
-.about-page .map-section{ padding:60px 0; max-width:1200px; margin:0 auto; padding-left:20px; padding-right:20px; }
-.about-page .map-container{ height:420px; border-radius:10px; overflow:hidden; box-shadow:0 6px 20px rgba(0,0,0,0.06); }
-.about-page .location-info{ margin-top:22px; display:grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap:20px; }
-
-.about-page .info-card{ background:#fff; padding:22px; border-radius:10px; box-shadow:0 4px 16px rgba(0,0,0,0.04); }
-.about-page .info-card h3{ font-size:1.15rem; color:#2C3E50; margin-bottom:8px; display:flex; align-items:center; gap:8px; }
-.about-page .info-card p{ color:#555; line-height:1.6; }
-
-.about-page .impact-section{ padding:60px 0; background:#FEF5E7; }
-.about-page .impact-stats{ display:grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap:18px; max-width:1100px; margin:0 auto; padding:0 20px; text-align:center; }
-.about-page .impact-stat{ background:#fff; padding:24px; border-radius:10px; box-shadow:0 6px 18px rgba(0,0,0,0.04); }
-.about-page .stat-number{ font-size:2.4rem; color:#D35400; font-weight:700; }
-.about-page .stat-label{ color:#444; margin-top:6px; }
-
-.about-page .team-section{ padding:60px 0; }
-.about-page .team-members{ display:grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap:22px; max-width:1100px; margin:0 auto; padding:0 20px; }
-.about-page .team-member{ background:#fff; padding:20px; border-radius:10px; text-align:center; box-shadow:0 6px 18px rgba(0,0,0,0.04); transition:transform .25s; }
-.about-page .team-member:hover{ transform:translateY(-6px); }
-.about-page .member-image{ width:120px;height:120px;margin:0 auto 14px;border-radius:50%;overflow:hidden;border:6px solid #FEF5E7; }
-.about-page .member-image img{ width:100%; height:100%; object-fit:cover; display:block; }
-.about-page .member-name{ font-size:1.1rem; color:#2C3E50; margin-bottom:6px; }
-.about-page .member-role{ color:#D35400; font-weight:600; margin-bottom:10px; }
-.about-page .member-description{ color:#666; font-size:.95rem; line-height:1.6; }
-
-.about-page .cta-section{ padding:56px 0; background: linear-gradient(90deg,#D35400,#E67E22); color:#fff; text-align:center; }
-.about-page .cta-section .cta-btn{ background:#fff;color:#D35400;padding:12px 26px;border-radius:999px;text-decoration:none;font-weight:700;display:inline-block; }
-
-@media (max-width:900px){
-  .about-page .mission-container{ grid-template-columns:1fr; }
-  .about-page .hero-title{ font-size:2rem; }
-  .about-page .map-container{ height:300px; }
-}
-</style>
-
-<div class="about-page">
-
+<section class="bg-white text-[#333]">
   <!-- Hero -->
-  <section class="hero-section">
-    <div class="container">
-      <div class="hero-content">
-        <h1 class="hero-title">Connecting Artisans with the World</h1>
-        <p class="hero-subtitle">SokherBazar is a platform dedicated to preserving traditional crafts and supporting rural artisans by connecting them with customers who value authenticity and story-driven products.</p>
-        <a href="{% url 'product_list' %}" class="btn btn-primary">Explore Our Products</a>
+  <div class="relative overflow-hidden">
+    <div
+      class="w-full bg-center bg-cover"
+      style="background-image:url('{% static "images/about-hero.jpg" %}');"
+    >
+      <div class="bg-white/95">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20 text-center">
+          <h1 class="text-3xl md:text-4xl font-semibold text-[#2C3E50]">
+            Connecting Artisans with the World
+          </h1>
+          <p class="mt-3 max-w-3xl mx-auto text-gray-600">
+            SokherBazar is a platform dedicated to preserving traditional crafts and supporting rural artisans by
+            connecting them with customers who value authenticity and story-driven products.
+          </p>
+          <a href="{% url 'product_list' %}"
+             class="inline-flex items-center gap-2 mt-6 h-11 px-6 rounded-full bg-[#D35400] text-white font-semibold hover:bg-orange-600 transition">
+            Explore Our Products
+          </a>
+        </div>
       </div>
     </div>
-  </section>
+  </div>
 
   <!-- Mission -->
-  <section class="mission-section">
-    <div class="mission-container">
-      <div class="mission-image">
-        <img src="{% static 'images/mission.jpg' %}" alt="Artisan at work">
-      </div>
-      <div class="mission-content">
-        <h2>Our Mission</h2>
-        <p>To preserve traditional craftsmanship and create sustainable income for rural artisans by connecting them to modern markets.</p>
-        <p>We showcase carefully verified, hand-made goods — each product carries a story. We focus on fairness, trust, and accessibility so artisans get a fair share.</p>
-        <p>By building trust (reviews, verification, seller story videos) and providing a simple Bangla-first UI, we make e-commerce accessible to everyone.</p>
+  <div class="bg-[#FEF5E7]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+      <div class="grid md:grid-cols-2 gap-8 items-center">
+        <div class="rounded-xl overflow-hidden shadow-sm">
+          <img src="{% static 'images/mission.jpg' %}" alt="Artisan at work" class="w-full h-auto object-cover">
+        </div>
+        <div>
+          <h2 class="text-2xl md:text-3xl font-semibold text-[#2C3E50]">Our Mission</h2>
+          <div class="w-16 h-1 bg-[#D35400] rounded-full mt-2"></div>
+          <p class="mt-4 text-gray-700 leading-relaxed">
+            To preserve traditional craftsmanship and create sustainable income for rural artisans by connecting them to modern markets.
+          </p>
+          <p class="mt-3 text-gray-700 leading-relaxed">
+            We showcase carefully verified, hand-made goods — each product carries a story. We focus on fairness, trust, and
+            accessibility so artisans get a fair share.
+          </p>
+          <p class="mt-3 text-gray-700 leading-relaxed">
+            By building trust (reviews, verification, seller story videos) and providing a simple Bangla-first UI, we make
+            e-commerce accessible to everyone.
+          </p>
+        </div>
       </div>
     </div>
-  </section>
+  </div>
+
+  <!-- Impact (optional numbers) -->
+  <div class="bg-[#FEF5E7]">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 text-center">
+        <div class="rounded-xl bg-white shadow-sm p-6">
+          <div class="text-3xl font-bold text-[#D35400]">500+</div>
+          <div class="text-gray-600 mt-1 text-sm">Artisans Supported</div>
+        </div>
+        <div class="rounded-xl bg-white shadow-sm p-6">
+          <div class="text-3xl font-bold text-[#D35400]">5k+</div>
+          <div class="text-gray-600 mt-1 text-sm">Products Listed</div>
+        </div>
+        <div class="rounded-xl bg-white shadow-sm p-6">
+          <div class="text-3xl font-bold text-[#D35400]">40+</div>
+          <div class="text-gray-600 mt-1 text-sm">Districts Reached</div>
+        </div>
+        <div class="rounded-xl bg-white shadow-sm p-6">
+          <div class="text-3xl font-bold text-[#D35400]">4.8★</div>
+          <div class="text-gray-600 mt-1 text-sm">Avg. Product Rating</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Team -->
-  <section class="team-section">
-    <div class="container">
-      <h2 style="text-align:center; margin-bottom:20px;">Meet Our Team</h2>
-      <div class="team-members">
-        <div class="team-member">
-          <div class="member-image">
-            <img src="{% static 'images/team1.jpeg' %}" alt="Team Member 1">
-          </div>
-          <div class="member-name">Junaid Rafi</div>
-          <div class="member-role">Founder & CEO</div>
-          <div class="member-description">Passionate about building digital marketplaces that bring fair income to artisans.</div>
-        </div>
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+    <h2 class="text-2xl md:text-3xl font-semibold text-[#2C3E50] text-center">Meet Our Team</h2>
+    <div class="w-16 h-1 bg-[#D35400] rounded-full mx-auto mt-2"></div>
 
-        <div class="team-member">
-          <div class="member-image">
-            <img src="{% static 'images/team2.jpeg' %}" alt="Shammi">
-          </div>
-          <div class="member-name">Ishrat Jahan Shammi</div>
-          <div class="member-role">Co-Founder & CTO</div>
-          <div class="member-description">Leads product and platform development, focusing on accessible UX and scalability.</div>
+    <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <!-- Member -->
+      <div class="rounded-2xl bg-white shadow-sm hover:shadow-md transition p-6 text-center">
+        <div class="w-28 h-28 mx-auto rounded-full overflow-hidden ring-8 ring-[#FEF5E7]">
+          <img src="{% static 'images/team1.jpeg' %}" alt="Junaid Rafi" class="w-full h-full object-cover">
         </div>
+        <div class="mt-4 text-lg font-semibold text-[#2C3E50]">Junaid Rafi</div>
+        <div class="text-[#D35400] font-semibold text-sm">Founder & CEO</div>
+        <p class="mt-2 text-gray-600 text-sm">
+          Passionate about building digital marketplaces that bring fair income to artisans.
+        </p>
+      </div>
 
-        <div class="team-member">
-          <div class="member-image">
-            <img src="{% static 'images/team3.jpeg' %}" alt="Younus Talukdar">
-          </div>
-          <div class="member-name">Younus Talukdar</div>
-          <div class="member-role">Marketing Head</div>
-          <div class="member-description">Connects artisan stories to buyers through thoughtful storytelling and campaigns.</div>
+      <div class="rounded-2xl bg-white shadow-sm hover:shadow-md transition p-6 text-center">
+        <div class="w-28 h-28 mx-auto rounded-full overflow-hidden ring-8 ring-[#FEF5E7]">
+          <img src="{% static 'images/team2.jpeg' %}" alt="Ishrat Jahan Shammi" class="w-full h-full object-cover">
         </div>
+        <div class="mt-4 text-lg font-semibold text-[#2C3E50]">Ishrat Jahan Shammi</div>
+        <div class="text-[#D35400] font-semibold text-sm">Co-Founder & CTO</div>
+        <p class="mt-2 text-gray-600 text-sm">
+          Leads product and platform development, focusing on accessible UX and scalability.
+        </p>
+      </div>
+
+      <div class="rounded-2xl bg-white shadow-sm hover:shadow-md transition p-6 text-center">
+        <div class="w-28 h-28 mx-auto rounded-full overflow-hidden ring-8 ring-[#FEF5E7]">
+          <img src="{% static 'images/team3.jpeg' %}" alt="Younus Talukdar" class="w-full h-full object-cover">
+        </div>
+        <div class="mt-4 text-lg font-semibold text-[#2C3E50]">Younus Talukdar</div>
+        <div class="text-[#D35400] font-semibold text-sm">Marketing Head</div>
+        <p class="mt-2 text-gray-600 text-sm">
+          Connects artisan stories to buyers through thoughtful storytelling and campaigns.
+        </p>
       </div>
     </div>
-  </section>
+  </div>
 
   <!-- CTA -->
-  <section class="cta-section">
-    <div class="container">
-      <div class="cta-content">
-        <h3 style="margin-bottom:8px;">Join Us in Making a Difference</h3>
-        <p style="margin-bottom:16px; opacity:0.95;">Every purchase supports artisans and preserves cultural heritage.</p>
-        <a href="{% url 'product_list' %}" class="cta-btn">Shop Now</a>
-      </div>
+  <div class="bg-gradient-to-r from-[#D35400] to-[#E67E22] text-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
+      <h3 class="text-2xl md:text-3xl font-semibold">Join Us in Making a Difference</h3>
+      <p class="mt-2 text-white/90">Every purchase supports artisans and preserves cultural heritage.</p>
+      <a href="{% url 'product_list' %}"
+         class="inline-flex items-center gap-2 mt-5 h-11 px-6 rounded-full bg-white text-[#D35400] font-semibold hover:bg-white/90 transition">
+        Shop Now
+      </a>
     </div>
-  </section>
-
-</div>
+  </div>
+</section>
 {% endblock %}
-
