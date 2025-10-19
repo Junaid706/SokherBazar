@@ -1,9 +1,56 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ story.title }} - SokherBazar{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h2>{{ story.title }}</h2>
-    <img src="{{ story.image.url }}" alt="{{ story.title }}" style="max-width:100%; height:auto;">
-    <p>{{ story.content }}</p>
-</div>
+<section class="bg-white">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+    <!-- Breadcrumb -->
+    <nav class="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
+      <ol class="flex items-center gap-2">
+        <li><a href="{% url 'home' %}" class="hover:text-gray-700">Home</a></li>
+        <li class="text-gray-400">/</li>
+        <li><a href="{% url 'stories' %}" class="hover:text-gray-700">Stories</a></li>
+        <li class="text-gray-400">/</li>
+        <li class="text-gray-700 truncate" aria-current="page">{{ story.title }}</li>
+      </ol>
+    </nav>
+
+    <!-- Story Header -->
+    <div class="text-center mb-8">
+      <h1 class="text-3xl md:text-4xl font-semibold text-[#2C3E50]">{{ story.title }}</h1>
+      <div class="mt-2 text-gray-500 text-sm">
+        By {{ story.author|default:"SokherBazar" }}
+        {% if story.category %} • {{ story.category }}{% endif %}
+        {% if story.read_time %} • {{ story.read_time }}{% endif %}
+      </div>
+    </div>
+
+    <!-- Story Image -->
+    <div class="rounded-2xl overflow-hidden shadow-sm border border-gray-100 mb-8">
+      {% if story.image %}
+        <img src="{{ story.image.url }}" alt="{{ story.title }}" class="w-full h-auto object-cover">
+      {% else %}
+        <img src="{% static 'images/default-story.jpg' %}" alt="Default Story" class="w-full h-auto object-cover">
+      {% endif %}
+    </div>
+
+    <!-- Story Content -->
+    <div class="prose prose-lg max-w-none text-gray-700 leading-relaxed">
+      {{ story.content|linebreaks }}
+    </div>
+
+    <!-- Back Button -->
+    <div class="mt-10 text-center">
+      <a href="{% url 'stories' %}"
+         class="inline-flex items-center gap-2 px-6 py-2 rounded-full border-2 border-[#D35400] text-[#D35400] font-semibold hover:bg-[#D35400] hover:text-white transition">
+        <i class="fa-solid fa-arrow-left"></i>
+        Back to Stories
+      </a>
+    </div>
+
+  </div>
+</section>
 {% endblock %}
