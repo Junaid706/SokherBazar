@@ -1,52 +1,147 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block content %}
-<!-- Contact Us Section -->
-<section class="contact-section py-5 bg-light">
-  <div class="container">
-    <h2 class="text-center mb-4">Contact Us</h2>
-    <p class="lead text-center mb-5">
-      Have questions, feedback, or want to collaborate with us?
-      Feel free to reach out anytime – we’d love to hear from you!
-    </p>
+{% block extra_css %}
+<!-- Tailwind CSS (Play CDN) -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          primary: '#D35400',
+          secondary: '#27AE60',
+          accent: '#E67E22',
+          dark: '#2C3E50'
+        },
+        boxShadow: {
+          card: '0 8px 24px rgba(0,0,0,.08)'
+        }
+      }
+    }
+  }
+</script>
+<!-- Icons (optional) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+{% endblock %}
 
-    <div class="row">
+{% block content %}
+<section class="bg-white">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+    <!-- Header -->
+    <div class="text-center max-w-2xl mx-auto">
+      <h2 class="text-3xl md:text-4xl font-semibold text-dark">Contact Us</h2>
+      <p class="mt-3 text-gray-600">
+        Have questions, feedback, or want to collaborate? We’d love to hear from you.
+      </p>
+    </div>
+
+    <!-- Grid -->
+    <div class="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
       <!-- Contact Form -->
-      <div class="col-md-6">
-        <form>
-          <div class="mb-3">
-            <label for="name" class="form-label">Your Name</label>
-            <input type="text" id="name" class="form-control" placeholder="Enter your name" required>
+      <div class="bg-white border border-gray-100 rounded-2xl p-6 shadow-card">
+        <form method="post" action="{% url 'contact' %}" id="contactForm" novalidate>
+          {% csrf_token %}
+          <div class="space-y-4">
+            <div>
+              <label for="name" class="block text-sm font-medium text-gray-700">Your Name</label>
+              <input id="name" name="name" type="text" required
+                     class="mt-1 w-full h-11 px-4 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary"
+                     placeholder="Enter your name">
+            </div>
+
+            <div>
+              <label for="email" class="block text-sm font-medium text-gray-700">Your Email</label>
+              <input id="email" name="email" type="email" required
+                     class="mt-1 w-full h-11 px-4 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary"
+                     placeholder="Enter your email">
+            </div>
+
+            <div>
+              <label for="message" class="block text-sm font-medium text-gray-700">Message</label>
+              <textarea id="message" name="message" rows="5" required
+                        class="mt-1 w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary"
+                        placeholder="Write your message..."></textarea>
+            </div>
+
+            <button type="submit"
+                    class="inline-flex items-center gap-2 h-11 px-6 rounded-full bg-primary text-white font-semibold hover:bg-orange-600 transition">
+              <i class="fa-regular fa-paper-plane"></i>
+              Send Message
+            </button>
+
+            <!-- Success/Error placeholder (client-side) -->
+            <p id="formStatus" class="hidden text-sm mt-2"></p>
           </div>
-          <div class="mb-3">
-            <label for="email" class="form-label">Your Email</label>
-            <input type="email" id="email" class="form-control" placeholder="Enter your email" required>
-          </div>
-          <div class="mb-3">
-            <label for="message" class="form-label">Message</label>
-            <textarea id="message" rows="5" class="form-control" placeholder="Write your message..." required></textarea>
-          </div>
-          <button type="submit" class="btn btn-warning">Send Message</button>
         </form>
       </div>
 
       <!-- Contact Info + Map -->
-      <div class="col-md-6">
-        <h5 class="mb-3">Our Office</h5>
-        <p><strong>SokherBazar HQ</strong><br>Dhaka, Bangladesh</p>
-        <p>Email: <a href="mailto:sokherbazar@gmail.com">sokherbazar@gmail.com</a></p>
-        <p>Phone: +880 1234-567890</p>
+      <div class="space-y-5">
+        <div class="bg-white border border-gray-100 rounded-2xl p-6 shadow-card">
+          <h5 class="text-lg font-semibold text-gray-900 mb-2">Our Office</h5>
+          <p class="text-gray-700">
+            <strong class="text-dark">SokherBazar HQ</strong><br>
+            Dhaka, Bangladesh
+          </p>
 
-        <!-- Google Map -->
-        <div class="map-responsive mt-3">
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3651.903409189381!2d90.39146337428897!3d23.7508857786797!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755b894c0f3f0b7%3A0xd3a9d5e0b8c8f4!2sUniversity%20of%20Asia%20Pacific!5e0!3m2!1sen!2sbd!4v1695372734973!5m2!1sen!2sbd"
-            width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy">
-          </iframe>
+          <div class="mt-4 space-y-2 text-gray-700">
+            <p>
+              <i class="fa-regular fa-envelope mr-2 text-primary"></i>
+              <a href="mailto:sokherbazar@gmail.com" class="hover:text-primary">sokherbazar@gmail.com</a>
+            </p>
+            <p>
+              <i class="fa-solid fa-phone mr-2 text-primary"></i>
+              +880 1234-567890
+            </p>
+          </div>
+        </div>
+
+        <div class="rounded-2xl overflow-hidden border border-gray-100 shadow-card">
+          <div class="aspect-[16/9]">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3651.903409189381!2d90.39146337428897!3d23.7508857786797!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755b894c0f3f0b7%3A0xd3a9d5e0b8c8f4!2sUniversity%20of%20Asia%20Pacific!5e0!3m2!1sen!2sbd!4v1695372734973!5m2!1sen!2sbd"
+              class="w-full h-full" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+              title="SokherBazar Location"></iframe>
+          </div>
         </div>
       </div>
     </div>
+
   </div>
 </section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Simple client-side validation + UX feedback
+  (function(){
+    const form = document.getElementById('contactForm');
+    const statusEl = document.getElementById('formStatus');
+
+    if(!form) return;
+
+    form.addEventListener('submit', function(e){
+      const name = form.querySelector('#name').value.trim();
+      const email = form.querySelector('#email').value.trim();
+      const message = form.querySelector('#message').value.trim();
+
+      if(!name || !email || !message){
+        e.preventDefault();
+        statusEl.textContent = 'Please fill out all fields.';
+        statusEl.className = 'text-red-600 text-sm mt-2';
+        statusEl.classList.remove('hidden');
+        return false;
+      }
+
+      // If you handle POST in Django, let it submit normally.
+      // If you want AJAX instead, preventDefault here and POST via fetch().
+      statusEl.textContent = 'Sending...';
+      statusEl.className = 'text-gray-600 text-sm mt-2';
+      statusEl.classList.remove('hidden');
+      // allow normal submit
+    });
+  })();
+</script>
 {% endblock %}
