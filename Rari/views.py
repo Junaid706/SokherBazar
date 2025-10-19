@@ -8,7 +8,7 @@ from django.db.models import Q
 from math import floor
 from django.views.generic import DetailView
 from django.http import JsonResponse
-
+from decimal import Decimal, InvalidOperation
 from .models import Product, Wishlist, Category, Artisan, Story, Order, OrderItem, Customer
 
 
@@ -118,24 +118,28 @@ def product_list(request):
 # -------------------- PRODUCT DETAIL --------------------
 def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
-
-    full_stars = int(floor(product.rating))
-    half_star = 1 if (product.rating - full_stars) >= 0.5 else 0
-    empty_stars = 5 - full_stars - half_star
-    product.star_list = {
-        'full': range(full_stars),
-        'half': range(half_star),
-        'empty': range(empty_stars),
-    }
-
     related_products = Product.objects.filter(category=product.category).exclude(id=product.id)[:4]
 
+    # --- Compute savings and discount percent safely ---
+    savings = None
+    discount_percent = None
+    try:
+        if product.discount_price and product.price:
+            base = Decimal(str(product.price))
+            disc = Decimal(str(product.discount_price))
+            savings = base - disc
+            if base > 0:
+                discount_percent = int((savings / base * 100).quantize(Decimal('1')))
+    except (InvalidOperation, TypeError, ValueError):
+        pass
+
     context = {
-        'product': product,
-        'related_products': related_products,
+        "product": product,
+        "related_products": related_products,
+        "savings": savings,
+        "discount_percent": discount_percent,
     }
     return render(request, "product_detail.html", context)
-
 
 # -------------------- ARTISAN DETAIL --------------------
 class ArtisanDetailView(DetailView):
