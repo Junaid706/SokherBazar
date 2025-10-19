@@ -4,112 +4,151 @@
 {% block title %}{{ artisan.shop_name }} - SokherBazar{% endblock %}
 
 {% block content %}
+<section class="bg-white">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
-<!-- Breadcrumb -->
-<div class="breadcrumb">
-    <div class="container">
-        <div class="breadcrumb-content">
-            <a href="{% url 'home' %}">Home</a>
-            <span class="breadcrumb-divider">/</span>
-            <a href="{% url 'artisans' %}">Artisans</a>
-            <span class="breadcrumb-divider">/</span>
-            <span>{{ artisan.shop_name }}</span>
-        </div>
-    </div>
-</div>
+    <!-- Breadcrumb -->
+    <nav class="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
+      <ol class="flex items-center gap-2">
+        <li><a href="{% url 'home' %}" class="hover:text-gray-700">Home</a></li>
+        <li class="text-gray-400">/</li>
+        <li><a href="{% url 'artisans' %}" class="hover:text-gray-700">Artisans</a></li>
+        <li class="text-gray-400">/</li>
+        <li class="text-gray-700" aria-current="page">{{ artisan.shop_name }}</li>
+      </ol>
+    </nav>
 
-<!-- Artisan Profile Header -->
-<section class="artisan-header">
-    <div class="container">
-        <div class="cover-photo">
-            {% if artisan.cover_photo %}
-                <img src="{{ artisan.cover_photo.url }}" alt="{{ artisan.shop_name }} Cover Photo">
+    <!-- Header / Cover -->
+    <div class="rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+      <div class="relative h-48 md:h-64 bg-gray-100">
+        {% if artisan.profile_picture %}
+          <img src="{{ artisan.profile_picture.url }}" alt="{{ artisan.shop_name }}" class="w-full h-full object-cover">
+              
+        {% else %}
+          <img src="{% static 'images/default_cover.jpg' %}" alt="Default Cover"
+               class="w-full h-full object-cover">
+        {% endif %}
+
+        <!-- Avatar -->
+        <div class="absolute -bottom-10 left-6 flex items-end gap-4">
+          <div class="w-28 h-28 rounded-xl overflow-hidden ring-4 ring-white bg-gray-200">
+            {% if artisan.profile_picture %}
+              <img src="{{ artisan.profile_picture.url }}" alt="{{ artisan.shop_name }}" class="w-full h-full object-cover">
             {% else %}
-                <img src="{% static 'images/default_cover.jpg' %}" alt="Default Cover">
+              <img src="{% static 'images/default_profile.jpg' %}" alt="Default Profile" class="w-full h-full object-cover">
             {% endif %}
+          </div>
         </div>
-        
-        <div class="profile-info">
-            <div class="profile-image">
-                {% if artisan.profile_picture %}
-                    <img src="{{ artisan.profile_picture.url }}" alt="{{ artisan.shop_name }}">
-                {% else %}
-                    <img src="{% static 'images/default_profile.jpg' %}" alt="Default Profile">
-                {% endif %}
+      </div>
+
+      <!-- Profile info -->
+      <div class="pt-12 px-6 pb-6 md:px-8">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h1 class="text-2xl md:text-3xl font-semibold text-[#2C3E50]">{{ artisan.shop_name }}</h1>
+            <div class="mt-2 flex items-center text-sm text-gray-600">
+              <i class="fa-solid fa-map-marker-alt mr-2 text-[#D35400]"></i>
+              <span>{{ artisan.location|default:"Bangladesh" }}</span>
             </div>
-            
-            <div class="profile-details">
-                <h1 class="artisan-name">{{ artisan.shop_name }}</h1>
-                <div class="artisan-location">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span>{{ artisan.location }}</span>
-                </div>
-                
-                <div class="artisan-stats">
-                    <div class="stat-item">
-                        <div class="stat-value">{{ products.count }}</div>
-                        <div class="stat-label">Products</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">{{ artisan.rating|default:"0" }}</div>
-                        <div class="stat-label">Rating</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">{{ artisan.joined_date|date:"Y" }}</div>
-                        <div class="stat-label">Joined Year</div>
-                    </div>
-                </div>
+          </div>
+
+          <!-- Stats -->
+          <div class="grid grid-cols-3 divide-x divide-gray-200 border border-gray-100 rounded-xl overflow-hidden">
+            <div class="px-5 py-3 text-center">
+              <div class="text-secondary font-bold">{{ products.count|default:"0" }}</div>
+              <div class="text-[12px] text-gray-500">Products</div>
             </div>
-        </div>
-    </div>
-</section>
-
-<!-- Artisan Story Section -->
-<section class="artisan-story-section">
-    <div class="container">
-        <h2 class="section-title">Artisan Story</h2>
-        <div class="story-content">
-            <p>{{ artisan.bio|linebreaks }}</p>
-        </div>
-    </div>
-</section>
-
-<!-- Products Section -->
-<section class="products-section">
-    <div class="container">
-        <h2 class="section-title">Products by {{ artisan.shop_name }}</h2>
-
-        <div class="products-grid">
-            {% for product in products %}
-            <div class="product-card">
-                <div class="product-img">
-                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
-                    <div class="product-overlay">
-                        <div class="quick-view">Quick View</div>
-                    </div>
-                </div>
-                <div class="product-content">
-                    <h3>{{ product.name }}</h3>
-                    <div class="product-price">৳ {{ product.price }}</div>
-                    <div class="product-rating">
-                        {% for _ in product.star_list.full %}
-                            <i class="fas fa-star"></i>
-                        {% endfor %}
-                        {% for _ in product.star_list.half %}
-                            <i class="fas fa-star-half-alt"></i>
-                        {% endfor %}
-                        {% for _ in product.star_list.empty %}
-                            <i class="far fa-star"></i>
-                        {% endfor %}
-                    </div>
-                    <button class="add-to-cart-sm">Add to Cart</button>
-                </div>
+            <div class="px-5 py-3 text-center">
+              <div class="text-secondary font-bold">{{ artisan.rating|default:"0" }}</div>
+              <div class="text-[12px] text-gray-500">Rating</div>
             </div>
-            {% empty %}
-            <p>No products found for this artisan.</p>
-            {% endfor %}
+            <div class="px-5 py-3 text-center">
+              <div class="text-secondary font-bold">
+                {% if artisan.joined_date %}{{ artisan.joined_date|date:"Y" }}{% else %}—{% endif %}
+              </div>
+              <div class="text-[12px] text-gray-500">Joined</div>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
-</section>
 
+    <!-- Story -->
+    <section class="mt-10">
+      <h2 class="text-xl md:text-2xl font-semibold text-[#2C3E50]">Artisan Story</h2>
+      <div class="w-16 h-1 bg-[#D35400] rounded-full mt-2"></div>
+
+      <div class="mt-4 rounded-xl border border-gray-100 bg-white shadow-sm p-5 md:p-6">
+        <div class="prose max-w-none text-gray-700">
+          {{ artisan.bio|linebreaks }}
+        </div>
+      </div>
+    </section>
+
+    <!-- Products -->
+    <section class="mt-10">
+      <h2 class="text-xl md:text-2xl font-semibold text-[#2C3E50]">
+        Products by {{ artisan.shop_name }}
+      </h2>
+      <div class="w-16 h-1 bg-[#D35400] rounded-full mt-2"></div>
+
+      <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {% for product in products %}
+          <div class="group rounded-2xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
+            <div class="relative h-48 bg-gray-50">
+              {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+              {% else %}
+                <img src="{% static 'images/default-product.jpg' %}" alt="{{ product.name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+              {% endif %}
+
+              <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition"></div>
+              <div class="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition">
+                <span class="inline-block text-xs px-2.5 py-1 rounded-full bg-white/90 border border-gray-200 shadow-sm">Quick View</span>
+              </div>
+            </div>
+
+            <div class="p-5">
+              <p class="text-sm text-gray-500">{{ product.category.name|default:"Uncategorized" }}</p>
+              <h3 class="mt-1 text-lg font-semibold text-[#2C3E50] line-clamp-1">{{ product.name }}</h3>
+
+              <div class="mt-2 flex items-center justify-between">
+                <div class="flex items-baseline gap-2">
+                  <span class="text-[#D35400] font-bold">৳ {{ product.discount_price|default:product.price }}</span>
+                  {% if product.discount_price %}
+                    <span class="text-gray-400 line-through text-sm">৳ {{ product.price }}</span>
+                  {% endif %}
+                </div>
+                <span class="text-xs text-gray-500">Rating: {{ product.rating|default:"0" }}</span>
+              </div>
+
+              <!-- Add to Cart -->
+              <form action="{% url 'add_to_cart' product.id %}" method="POST" class="mt-4">
+                {% csrf_token %}
+                <input type="hidden" name="quantity" value="1">
+                <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                <button type="submit"
+                        class="w-full h-10 inline-flex items-center justify-center gap-2 rounded-full bg-[#D35400] text-white font-semibold hover:bg-orange-600 transition">
+                  <i class="fa-solid fa-cart-plus"></i>
+                  Add to Cart
+                </button>
+              </form>
+            </div>
+          </div>
+        {% empty %}
+          <div class="col-span-full">
+            <div class="rounded-xl border border-gray-200 bg-white p-8 text-center">
+              <p class="text-gray-600">No products found for this artisan.</p>
+              <a href="{% url 'product_list' %}"
+                 class="inline-flex items-center gap-2 mt-4 h-11 px-6 rounded-full bg-[#D35400] text-white font-semibold hover:bg-orange-600 transition">
+                Browse Products
+              </a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+
+  </div>
+</section>
 {% endblock %}

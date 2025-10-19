@@ -15,7 +15,15 @@ from django.contrib import messages
 from .models import ContactMessage
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
-
+from django.views.decorators.http import require_POST
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
+from django.views.decorators.http import require_POST
+from django.db import transaction
+from django.db.models import F
+from django.urls import reverse
+from django.utils.http import url_has_allowed_host_and_scheme
+from django.conf import settings
 # -------------------- HOME --------------------
 def home(request):
     query = request.GET.get("q", "")
@@ -176,20 +184,53 @@ def cart_detail(request):
     return render(request, "cart_detail.html", {"order": order, "total": total})
 
 
+@require_POST
+
 def add_to_cart(request, product_id):
     if not request.user.is_authenticated:
         messages.warning(request, "Please log in to add products to your cart.")
         return redirect('login')
 
     product = get_object_or_404(Product, id=product_id)
-    customer = get_object_or_404(Customer, user=request.user)
+
+    # Optional: block adding out-of-stock items
+    if hasattr(product, "in_stock") and not product.in_stock:
+        messages.error(request, "Sorry, this item is currently out of stock.")
+        return redirect(request.META.get('HTTP_REFERER', reverse('product_list')))
+
+    # Quantity from form (default 1, clamp to sane bounds)
+    try:
+        qty = int(request.POST.get('quantity', 1))
+    except (TypeError, ValueError):
+        qty = 1
+    qty = max(1, min(qty, 999))
+
+    # Ensure Customer + Pending Order
+    customer, _ = Customer.objects.get_or_create(user=request.user)
     order, _ = Order.objects.get_or_create(customer=customer, status="Pending")
-    order_item, item_created = OrderItem.objects.get_or_create(order=order, product=product)
-    if not item_created:
-        order_item.quantity += 1
-        order_item.save()
-    messages.success(request, f"{product.name} added to cart.")
-    return redirect(request.META.get('HTTP_REFERER', 'product_list'))
+
+    # Concurrency-safe increment
+    with transaction.atomic():
+        order_item, created = OrderItem.objects.select_for_update().get_or_create(
+            order=order, product=product, defaults={"quantity": 0}
+        )
+        order_item.quantity = F('quantity') + qty
+        order_item.save(update_fields=["quantity"])
+        # Optional: refresh if you need the actual integer now
+        # order_item.refresh_from_db(fields=["quantity"])
+
+    messages.success(request, f"Added {qty} × {product.name} to your cart.")
+
+    # Safer redirect: ?next=... > Referer > product_list
+    next_url = request.POST.get('next') or request.GET.get('next')
+    if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}):
+        return redirect(next_url)
+
+    referer = request.META.get('HTTP_REFERER')
+    if referer and url_has_allowed_host_and_scheme(referer, allowed_hosts={request.get_host()}):
+        return redirect(referer)
+
+    return redirect('product_list')
 
 
 def remove_from_cart(request, order_item_id):

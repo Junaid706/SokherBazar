@@ -2,202 +2,120 @@
 {% load static %}
 
 {% block content %}
-<style>
-    :root {
-        --primary: #D35400;      /* Terracotta */
-        --secondary: #27AE60;   /* Green */
-        --accent: #E67E22;      /* Orange */
-        --light: #FEF5E7;       /* Cream */
-        --dark: #2C3E50;        /* Dark Blue */
-        --text: #333333;
-        --text-light: #777777;
-        --white: #FFFFFF;
-        --gray: #f5f5f5;
-        --border: #e0e0e0;
-    }
+<section class="bg-white">
+  <div class=" mx-auto px-4 sm:px-6 lg:px-[250px] py-10">
 
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-
-    /* Intro Section */
-    .intro-section {
-        background: var(--light);
-        padding: 60px 20px;
-        text-align: center;
-        border-radius: 12px;
-        margin-bottom: 50px;
-    }
-    .intro-section h1 {
-        font-size: 2.5rem;
-        color: var(--dark);
-        margin-bottom: 15px;
-    }
-    .intro-section p {
-        font-size: 1.1rem;
-        color: var(--text-light);
-        max-width: 700px;
-        margin: 0 auto;
-        line-height: 1.6;
-    }
-
-    /* Section Title */
-    .section-title {
-        font-size: 2.2rem;
-        margin-bottom: 2rem;
-        text-align: center;
-        color: var(--dark);
-    }
-    .section-title:after {
-        content: '';
-        display: block;
-        width: 80px;
-        height: 4px;
-        background: var(--primary);
-        margin: 10px auto;
-        border-radius: 2px;
-    }
-
-    /* Filter Form */
-    .filter-form {
-        margin: 20px 0 40px;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 15px;
-        justify-content: center;
-    }
-    .filter-form input, .filter-form select, .filter-form button {
-        padding: 10px 15px;
-        border: 2px solid var(--border);
-        border-radius: 50px;
-        font-size: 0.95rem;
-    }
-    .filter-form button {
-        background: var(--primary);
-        color: white;
-        border: none;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-    .filter-form button:hover {
-        background: transparent;
-        color: var(--primary);
-        border: 2px solid var(--primary);
-    }
-
-    /* Artisan Cards */
-    .artisans-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill,minmax(300px,1fr));
-        gap: 30px;
-        padding: 20px 0 60px;
-    }
-    .artisan-card {
-        background: var(--white);
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        text-decoration: none;
-        color: inherit;
-        transition: transform 0.3s, box-shadow 0.3s;
-    }
-    .artisan-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    }
-    .artisan-image {
-        height: 200px;
-        overflow: hidden;
-    }
-    .artisan-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.5s;
-    }
-    .artisan-card:hover .artisan-image img {
-        transform: scale(1.05);
-    }
-    .artisan-content { padding: 20px; }
-    .artisan-name { font-size: 1.4rem; margin-bottom: 8px; color: var(--dark); }
-    .artisan-location { font-size: 0.9rem; color: var(--text-light); margin-bottom: 10px; }
-    .artisan-location i { margin-right: 5px; color: var(--primary); }
-    .artisan-craft { color: var(--primary); font-weight: 600; margin-bottom: 12px; display: block; }
-    .artisan-stats {
-        display: flex;
-        justify-content: space-between;
-        border-top: 1px solid var(--border);
-        padding-top: 12px;
-        margin-top: 15px;
-    }
-    .stat { text-align: center; }
-    .stat-value { font-weight: 700; color: var(--secondary); }
-    .stat-label { font-size: 0.8rem; color: var(--text-light); }
-
-    @media (max-width: 768px) {
-        .filter-form { flex-direction: column; align-items: stretch; }
-        .artisan-name { font-size: 1.2rem; }
-    }
-</style>
-
-<div class="container">
-
-    <!-- Intro Section -->
-    <div class="intro-section">
-        <h1>Our Artisans</h1>
-        <p>Discover the talented craftspeople behind every SokherBazar product. Each artisan brings generations of tradition and unique skills to their work.</p>
+    <!-- Intro -->
+    <div class="rounded-2xl bg-[#FEF5E7] px-6 py-10 text-center shadow-sm">
+      <h1 class="text-3xl md:text-4xl font-semibold text-[#2C3E50]">Our Artisans</h1>
+      <p class="mt-3 max-w-3xl mx-auto text-gray-600">
+        Discover the talented craftspeople behind every SokherBazar product. Each artisan brings generations
+        of tradition and unique skills to their work.
+      </p>
     </div>
 
-    <h2 class="section-title">Meet Our Artisans</h2>
+    <!-- Section title -->
+    <h2 class="text-2xl md:text-3xl font-semibold text-[#2C3E50] text-center mt-10">
+      Meet Our Artisans
+    </h2>
+    <div class="w-20 h-1 bg-[#D35400] mx-auto mt-3 rounded-full"></div>
 
-    <!-- Search + Filter -->
-    <form method="get" class="filter-form">
-        <input type="text" name="q" value="{{ query }}" placeholder="Search artisans...">
-        <select name="craft">
-            <option value="all">All Crafts</option>
-            {% for c in crafts %}
-                <option value="{{ c }}" {% if selected_craft == c %}selected{% endif %}>{{ c }}</option>
-            {% endfor %}
-        </select>
-        <button type="submit">Apply</button>
+    <!-- Filters -->
+    <form method="get"
+          class="mt-8 flex flex-col md:flex-row items-stretch md:items-center gap-3 justify-center">
+      <input
+        type="text"
+        name="q"
+        value="{{ query }}"
+        placeholder="Search artisans..."
+        class="h-11 w-full md:w-80 rounded-full border border-gray-200 px-4 outline-none focus:ring-2 focus:ring-[#D35400]"
+      />
+      <select
+        name="craft"
+        class="h-11 w-full md:w-56 rounded-full border border-gray-200 px-4 bg-white outline-none focus:ring-2 focus:ring-[#D35400]">
+        <option value="all">All Crafts</option>
+        {% for c in crafts %}
+          <option value="{{ c }}" {% if selected_craft == c %}selected{% endif %}>{{ c }}</option>
+        {% endfor %}
+      </select>
+      <button
+        type="submit"
+        class="h-11 px-6 rounded-full bg-[#D35400] text-white font-semibold hover:bg-orange-600 transition">
+        Apply
+      </button>
     </form>
 
-    <!-- Artisan Grid -->
-    <div class="artisans-grid">
-        {% for artisan in artisans %}
-        <a href="{% url 'artisan_detail' artisan.id %}" class="artisan-card">
-            <div class="artisan-image">
-                {% if artisan.profile_picture %}
-                    <img src="{{ artisan.profile_picture.url }}" alt="{{ artisan.shop_name }}">
-                {% else %}
-                    <img src="{% static 'images/default.jpg' %}" alt="Default Artisan">
-                {% endif %}
-            </div>
-            <div class="artisan-content">
-                <h3 class="artisan-name">{{ artisan.user }}</h3>
-                <div class="artisan-location">
-                    <i class="fas fa-map-marker-alt"></i> {{ artisan.location }}
-                </div>
-                <span class="artisan-craft">{{ artisan.craft }}</span>
-                <p>{{ artisan.bio|truncatewords:20 }}</p>
+    <!-- Grid -->
+    <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {% for artisan in artisans %}
+        <a href="{% url 'artisan_detail' artisan.id %}"
+           class="group block rounded-2xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
+          <!-- Image -->
+          <div class="relative h-48 overflow-hidden">
+            {% if artisan.profile_picture %}
+              <img src="{{ artisan.profile_picture.url }}" alt="{{ artisan.shop_name|default:artisan.user }}"
+                   class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            {% else %}
+              <img src="{% static 'images/default.jpg' %}" alt="Default Artisan"
+                   class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            {% endif %}
+          </div>
 
-                <div class="artisan-stats">
-                    <div class="stat">
-                        <div class="stat-value">{{ artisan.products.count|default:"0" }}</div>
-                        <div class="stat-label">Products</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">4.8</div>
-                        <div class="stat-label">Rating</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">{{ artisan.joined_date|date:"Y" }}</div>
-                        <div class="stat-label">Since</div>
-                    </div>
-                </div>
+          <!-- Content -->
+          <div class="p-5">
+            <h3 class="text-lg font-semibold text-[#2C3E50] truncate">
+              {{ artisan.shop_name|default:artisan.user }}
+            </h3>
+
+            <div class="mt-1 flex items-center text-sm text-gray-500">
+              <i class="fa-solid fa-map-marker-alt mr-2 text-[#D35400]"></i>
+              <span class="truncate">{{ artisan.location|default:"Bangladesh" }}</span>
             </div>
+
+            {% if artisan.craft %}
+              <span class="mt-2 inline-block rounded-full bg-orange-100 text-orange-700 text-xs font-semibold px-3 py-1">
+                {{ artisan.craft }}
+              </span>
+            {% endif %}
+
+            <p class="mt-3 text-gray-600 line-clamp-2">
+              {{ artisan.bio|default:""|truncatewords:28 }}
+            </p>
+
+            <!-- Stats -->
+            <div class="mt-4 grid grid-cols-3 divide-x divide-gray-100 border-t border-gray-100 pt-3 text-center">
+              <div>
+                <div class="text-secondary font-bold">
+                  {{ artisan.products.count|default:"0" }}
+                </div>
+                <div class="text-[12px] text-gray-500">Products</div>
+              </div>
+              <div>
+                <div class="text-secondary font-bold">4.8</div>
+                <div class="text-[12px] text-gray-500">Rating</div>
+              </div>
+              <div>
+                <div class="text-secondary font-bold">
+                  {% if artisan.joined_date %}{{ artisan.joined_date|date:"Y" }}{% else %}—{% endif %}
+                </div>
+                <div class="text-[12px] text-gray-500">Since</div>
+              </div>
+            </div>
+          </div>
         </a>
-        {% empty %}
-        <p>No artisans found.</p>
-        {% endfor %}
+      {% empty %}
+        <div class="col-span-full">
+          <div class="rounded-xl border border-gray-200 bg-white p-8 text-center">
+            <p class="text-gray-600">No artisans found.</p>
+            <a href="{% url 'product_list' %}"
+               class="inline-flex items-center gap-2 mt-4 h-11 px-6 rounded-full bg-[#D35400] text-white font-semibold hover:bg-orange-600 transition">
+              Browse Products
+            </a>
+          </div>
+        </div>
+      {% endfor %}
     </div>
-</div>
+
+  </div>
+</section>
 {% endblock %}
