@@ -10,7 +10,11 @@ from django.views.generic import DetailView
 from django.http import JsonResponse
 from decimal import Decimal, InvalidOperation
 from .models import Product, Wishlist, Category, Artisan, Story, Order, OrderItem, Customer
-
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import ContactMessage
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 
 # -------------------- HOME --------------------
 def home(request):
@@ -215,6 +219,39 @@ def about(request):
 
 
 def contact(request):
+    if request.method == "POST":
+        name = (request.POST.get("name") or "").strip()
+        email = (request.POST.get("email") or "").strip()
+        message_text = (request.POST.get("message") or "").strip()
+
+        # Simple validation
+        if not name or not email or not message_text:
+            messages.error(request, "Please fill out all fields.")
+            return render(request, "contact.html")
+
+        try:
+            validate_email(email)
+        except ValidationError:
+            messages.error(request, "Please enter a valid email address.")
+            return render(request, "contact.html")
+
+        # Save to DB (shows up in Admin)
+        ContactMessage.objects.create(
+            name=name, email=email, message=message_text
+        )
+
+        # (Optional) Notify admin by email
+        # send_mail(
+        #     subject=f"New contact from {name}",
+        #     message=f"From: {name} <{email}>\n\n{message_text}",
+        #     from_email=settings.DEFAULT_FROM_EMAIL,
+        #     recipient_list=[settings.DEFAULT_FROM_EMAIL],  # or a specific admin email
+        #     fail_silently=True,
+        # )
+
+        messages.success(request, "Thanks! Your message has been sent.")
+        return redirect("contact")  # PRG pattern to avoid resubmission
+
     return render(request, "contact.html")
 
 

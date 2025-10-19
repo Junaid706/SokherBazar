@@ -14,14 +14,11 @@
           accent: '#E67E22',
           dark: '#2C3E50'
         },
-        boxShadow: {
-          card: '0 8px 24px rgba(0,0,0,.08)'
-        }
+        boxShadow: { card: '0 8px 24px rgba(0,0,0,.08)' }
       }
     }
   }
 </script>
-<!-- Icons (optional) -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 {% endblock %}
 
@@ -37,6 +34,27 @@
       </p>
     </div>
 
+    <!-- FLASH MESSAGES (server-side) -->
+    {% if messages %}
+      <div class="max-w-2xl mx-auto mt-6 space-y-3">
+        {% for message in messages %}
+          {% if message.tags == 'success' %}
+            <div class="rounded-lg border border-green-200 bg-green-50 text-green-800 px-4 py-3">
+              {{ message }}
+            </div>
+          {% elif message.tags == 'error' or message.tags == 'warning' %}
+            <div class="rounded-lg border border-red-200 bg-red-50 text-red-700 px-4 py-3">
+              {{ message }}
+            </div>
+          {% else %}
+            <div class="rounded-lg border border-gray-200 bg-gray-50 text-gray-700 px-4 py-3">
+              {{ message }}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+
     <!-- Grid -->
     <div class="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
       <!-- Contact Form -->
@@ -48,21 +66,21 @@
               <label for="name" class="block text-sm font-medium text-gray-700">Your Name</label>
               <input id="name" name="name" type="text" required
                      class="mt-1 w-full h-11 px-4 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary"
-                     placeholder="Enter your name">
+                     placeholder="Enter your name" value="{{ request.POST.name }}">
             </div>
 
             <div>
               <label for="email" class="block text-sm font-medium text-gray-700">Your Email</label>
               <input id="email" name="email" type="email" required
                      class="mt-1 w-full h-11 px-4 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary"
-                     placeholder="Enter your email">
+                     placeholder="Enter your email" value="{{ request.POST.email }}">
             </div>
 
             <div>
               <label for="message" class="block text-sm font-medium text-gray-700">Message</label>
               <textarea id="message" name="message" rows="5" required
                         class="mt-1 w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary"
-                        placeholder="Write your message..."></textarea>
+                        placeholder="Write your message...">{{ request.POST.message }}</textarea>
             </div>
 
             <button type="submit"
@@ -71,7 +89,7 @@
               Send Message
             </button>
 
-            <!-- Success/Error placeholder (client-side) -->
+            <!-- Client-side status (optional) -->
             <p id="formStatus" class="hidden text-sm mt-2"></p>
           </div>
         </form>
@@ -102,7 +120,7 @@
           <div class="aspect-[16/9]">
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3651.903409189381!2d90.39146337428897!3d23.7508857786797!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755b894c0f3f0b7%3A0xd3a9d5e0b8c8f4!2sUniversity%20of%20Asia%20Pacific!5e0!3m2!1sen!2sbd!4v1695372734973!5m2!1sen!2sbd"
-              class="w-full h-full" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+              class="w-full h-full" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"
               title="SokherBazar Location"></iframe>
           </div>
         </div>
@@ -115,11 +133,10 @@
 
 {% block extra_js %}
 <script>
-  // Simple client-side validation + UX feedback
+  // Optional client-side validation prompt (server-side messages still apply)
   (function(){
     const form = document.getElementById('contactForm');
     const statusEl = document.getElementById('formStatus');
-
     if(!form) return;
 
     form.addEventListener('submit', function(e){
@@ -132,15 +149,7 @@
         statusEl.textContent = 'Please fill out all fields.';
         statusEl.className = 'text-red-600 text-sm mt-2';
         statusEl.classList.remove('hidden');
-        return false;
       }
-
-      // If you handle POST in Django, let it submit normally.
-      // If you want AJAX instead, preventDefault here and POST via fetch().
-      statusEl.textContent = 'Sending...';
-      statusEl.className = 'text-gray-600 text-sm mt-2';
-      statusEl.classList.remove('hidden');
-      // allow normal submit
     });
   })();
 </script>

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Artisan, Customer, Category, Product, Order, OrderItem, Story
+from .models import Artisan, Customer, Category, Product, Order, OrderItem, Story,ContactMessage
 
 
 # Inline Order Items (so they show inside Order)
@@ -7,7 +7,15 @@ class OrderItemInline(admin.TabularInline):
     model = OrderItem
     extra = 1
 
+@admin.register(ContactMessage)
+class ContactMessageAdmin(admin.ModelAdmin):
+    list_display = ("name", "email", "short_message", "is_read", "created_at")
+    list_filter = ("is_read", "created_at")
+    search_fields = ("name", "email", "message")
 
+    def short_message(self, obj):
+        return (obj.message[:60] + "…") if len(obj.message) > 60 else obj.message
+    short_message.short_description = "Message"
 
 
 # Artisan Admin
